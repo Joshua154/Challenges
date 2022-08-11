@@ -1,0 +1,15 @@
+name: Challenges
+version: '${project.version}'
+main: com.laudynetwork.challenges.Challenges
+api-version: 1.16
+
+commands:
+  timer:
+    description: Function 'Timer'
+  gamemode:
+    description: GameMode recoded command
+    aliases: [gm]
+  location:
+    description: Locate recoded command
+  test:
+    description: Locate recoded command

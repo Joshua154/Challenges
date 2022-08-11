@@ -1,0 +1,27 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+
+build:
+  image: maven:3-amazoncorretto-17
+  stage: build
+  only:
+    - master
+  artifacts:
+    paths:
+      - ./dist
+  script:
+    - mvn $MAVEN_CLI_OPTS package
+
+deploy:
+  image: justtreme/lftp:4.8.1
+  stage: deploy
+  only:
+    - master
+  dependencies:
+    - build
+  script:
+    - lftp -e "set sftp:auto-confirm yes; mirror -X .* -X .*/ --reverse --verbose ./dist /opt/laudynetwork/prod/local/templates/Challenge/default/plugins; bye" -u $SFTP_USER,$SFTP_PASSWORD sftp://176.9.57.124 -p 2442
