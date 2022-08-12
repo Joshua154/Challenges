@@ -20,7 +20,7 @@ public class Mod implements Listener, CommandExecutor, Comparable<Mod> {
     protected ModManager.ModType modType;
     @Getter
     protected ModManager.ModStatus modStatus;
-    protected boolean enabled = true;
+    protected boolean enabled = false;
 
     public Mod(String name, Material material, ModManager.ModType modType, ModManager.ModStatus modStatus) {
         this.name = name;
@@ -31,6 +31,11 @@ public class Mod implements Listener, CommandExecutor, Comparable<Mod> {
 
     public void enable() {
         Bukkit.getPluginManager().registerEvents(this, Challenges.get());
+        enabled = true;
+    }
+
+    public void disable() {
+        enabled = false;
     }
 
     @Override
