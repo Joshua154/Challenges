@@ -4,7 +4,8 @@ import com.laudynetwork.challenges.modifications.challenges.EnderDragonKill;
 import com.laudynetwork.challenges.modifications.challenges.KillAllBosses;
 import com.laudynetwork.challenges.modifications.challenges.NoDamage;
 import com.laudynetwork.challenges.modifications.challenges.NoDeath;
-import com.laudynetwork.challenges.modifications.gameModifications.BlockRandommizer;
+import com.laudynetwork.challenges.modifications.gameModifications.BlockRandomizer;
+import com.laudynetwork.challenges.modifications.gameModifications.CraftingRandomizer;
 import org.bukkit.ChatColor;
 
 import java.awt.*;
@@ -24,8 +25,11 @@ public class ModManager {
 
 
     public void registerGameMods() {
-        registerMod(new BlockRandommizer());
-        mods.stream().filter(mod -> mod.getType() == ModType.GAME_MODIFICATION).forEach(Mod::enable);
+        registerMod(new BlockRandomizer());
+        registerMod(new CraftingRandomizer());
+
+        getMod("Block Randomizer").enable();
+        getMod("Crafting Randomizer").enable();
     }
 
     private static ModManager instance;

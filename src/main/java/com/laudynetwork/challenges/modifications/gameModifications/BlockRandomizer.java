@@ -3,6 +3,7 @@ package com.laudynetwork.challenges.modifications.gameModifications;
 import com.google.gson.Gson;
 import com.laudynetwork.challenges.modifications.Mod;
 import com.laudynetwork.challenges.modifications.ModManager;
+import com.laudynetwork.challenges.util.UTILS;
 import org.bson.json.JsonObject;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -12,14 +13,12 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-public class BlockRandommizer extends Mod {
-    public BlockRandommizer() {
+public class BlockRandomizer extends Mod {
+    public BlockRandomizer() {
         super("Block Randomizer", Material.BEACON, ModManager.ModType.GAME_MODIFICATION, ModManager.ModStatus.WORK_IN_PROGRESS);
-
-        shuffle();
     }
 
-    private final Map<Material, Material> partners = new HashMap<>();
+    private final Map<Material, Material> partners = UTILS.shuffle(List.of(Material.values()), "block");
 
 
     @EventHandler
@@ -30,36 +29,6 @@ public class BlockRandommizer extends Mod {
                 event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(),
                         new ItemStack(getPartner(event.getBlock().getType())));
             }
-        }
-    }
-
-    private void shuffle() {
-        List<Material> remaining = new ArrayList<>();
-
-        partners.clear();
-
-        for (Material mat : Material.values()) {
-            if (mat.isItem()) {
-                remaining.add(mat);
-            }
-        }
-
-        for (Material mat : Material.values()) {
-            if (!remaining.isEmpty()) {
-                if (mat.isBlock()) {
-                    Random r = new Random();
-                    int rand;
-                    if (remaining.size() != 1) {
-                        rand = r.nextInt(remaining.size() - 1);
-                    } else {
-                        rand = 0;
-                    }
-                    partners.put(mat, remaining.get(rand));
-                    remaining.remove(rand);
-                }
-
-            }
-
         }
     }
 
