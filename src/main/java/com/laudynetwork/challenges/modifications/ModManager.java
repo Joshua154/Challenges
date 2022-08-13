@@ -2,6 +2,8 @@ package com.laudynetwork.challenges.modifications;
 
 import com.laudynetwork.challenges.modifications.challenges.EnderDragonKill;
 import com.laudynetwork.challenges.modifications.challenges.KillAllBosses;
+import com.laudynetwork.challenges.modifications.challenges.NoDamage;
+import com.laudynetwork.challenges.modifications.challenges.NoDeath;
 import com.laudynetwork.challenges.modifications.gameModifications.BlockRandommizer;
 import org.bukkit.ChatColor;
 
@@ -13,7 +15,11 @@ public class ModManager {
     public void registerChallenges() {
         registerMod(new EnderDragonKill());
         registerMod(new KillAllBosses());
-        mods.get(1).enable();
+        registerMod(new NoDamage());
+        registerMod(new NoDeath());
+
+        getMod("Ender Dragon Kill Challenge").enable();
+        getMod("No Damage Challenge").enable();
     }
 
 
@@ -21,9 +27,6 @@ public class ModManager {
         registerMod(new BlockRandommizer());
         mods.stream().filter(mod -> mod.getType() == ModType.GAME_MODIFICATION).forEach(Mod::enable);
     }
-
-
-
 
     private static ModManager instance;
     private static List<Mod> mods;
@@ -89,6 +92,14 @@ public class ModManager {
         ModStatus(String name, Color color) {
             this.name = name;
             this.color = color;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public Color getColor() {
+            return color;
         }
     }
 }

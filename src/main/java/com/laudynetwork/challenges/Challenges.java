@@ -2,6 +2,7 @@ package com.laudynetwork.challenges;
 
 import com.laudynetwork.challenges.Listener.GameModeSwitchListener;
 import com.laudynetwork.challenges.commands.*;
+import com.laudynetwork.challenges.modifications.Mod;
 import com.laudynetwork.challenges.modifications.ModManager;
 import com.laudynetwork.challenges.timer.DisplayMode;
 import com.laudynetwork.challenges.timer.Timer;
@@ -46,6 +47,9 @@ public final class Challenges extends JavaPlugin implements Listener {
     private final TimerPauseDisable timerPauseDisable = new TimerPauseDisable();
 
     private final List<Player> hiddenPlayers = new ArrayList<>();
+
+    @Getter
+    private final List<Player> playingPlayers = new ArrayList<>();
 
 
     @Override
@@ -118,5 +122,13 @@ public final class Challenges extends JavaPlugin implements Listener {
 
     public void removeHiddenPlayer(Player player) {
         hiddenPlayers.remove(player);
+    }
+
+    public void addPlayingPlayer(Player player) {
+        playingPlayers.add(player);
+    }
+
+    public void removePlayingPlayer(Player player) {
+        playingPlayers.add(player);
     }
 }

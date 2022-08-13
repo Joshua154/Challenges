@@ -19,12 +19,14 @@ public class GameModeSwitchListener implements Listener {
                 event.getNewGameMode() == GameMode.CREATIVE) {
 
             Challenges.get().addHiddenPlayer(event.getPlayer());
+            Challenges.get().removePlayingPlayer(event.getPlayer());
             event.getPlayer().setScoreboard(Challenges.get().getHiddenPlayerScoreBord());
             Challenges.get().getHiddenPlayerTeam().addEntry(event.getPlayer().getName());
             event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, true, false));
         }
         else {
             Challenges.get().removeHiddenPlayer(event.getPlayer());
+            Challenges.get().addPlayingPlayer(event.getPlayer());
             event.getPlayer().setScoreboard(Challenges.get().getHiddenPlayerScoreBord());
             Challenges.get().getHiddenPlayerTeam().removeEntry(event.getPlayer().getName());
             event.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
