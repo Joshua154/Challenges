@@ -7,22 +7,20 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class NoDeath extends Mod {
     public NoDeath() {
-        super("No Death Challenge", Material.SKELETON_SKULL, ModManager.ModType.CHALLENGE, ModManager.ModStatus.WORK_IN_PROGRESS);
+        super("No Death Challenge", "nde", Material.SKELETON_SKULL, ModManager.ModType.CHALLENGE, ModManager.ModStatus.WORK_IN_PROGRESS, "No Death Challenge");
     }
 
     @EventHandler
-    public void onDeath(EntityDamageEvent event){
-        if(event.getEntity() instanceof Player player){
+    public void onDeath(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player player) {
 
-            if(Challenges.get().getPlayingPlayers().contains(player)){
-                if(player.getHealth() - event.getDamage() <= 0){
+            if (Challenges.get().getPlayingPlayers().contains(player)) {
+                if (player.getHealth() - event.getDamage() <= 0) {
                     event.setCancelled(true);
-                    Challenges.get().timer.setRunning(false);
-                    super.failed(player, "he died");
+                    super.failed(player, "{{player}} died");
                 }
             }
         }

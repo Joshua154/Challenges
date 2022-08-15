@@ -8,8 +8,10 @@ commands:
     description: Function 'Timer'
   gamemode:
     description: GameMode recoded command
-    aliases: [gm]
+    aliases: [ gm ]
   location:
-    description: Locate recoded command
+    description: command
   test:
-    description: Locate recoded command
+    description: command
+  gui:
+    description: command

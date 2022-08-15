@@ -1,4 +1,4 @@
-package com.laudynetwork.challenges.commands;
+package com.laudynetwork.challenges.Listener;
 
 import com.laudynetwork.challenges.Challenges;
 import org.bukkit.*;
@@ -20,7 +20,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TimerPauseDisable implements Listener {
+public class FunctionsOnTimerPause implements Listener {
     private final List<LivingEntity> disabledEntities = new ArrayList<>();
 
     private boolean DO_DAYLIGHT_CYCLE = true;
@@ -31,105 +31,101 @@ public class TimerPauseDisable implements Listener {
 
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event){
-        if(Challenges.get().timer == null) return;
-        if(Challenges.get().timer.isUnPaused()) return;
-        if(event.getPlayer().getGameMode() == GameMode.CREATIVE ||
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if (Challenges.get().timer == null) return;
+        if (Challenges.get().timer.isUnPaused()) return;
+        if (event.getPlayer().getGameMode() == GameMode.CREATIVE ||
                 event.getPlayer().getGameMode() == GameMode.SPECTATOR) return;
 
-        if(event.getPlayer().getLocation().subtract(0,0.1, 0).getBlock().getType() != Material.AIR){
+        if (event.getPlayer().getLocation().subtract(0, 0.1, 0).getBlock().getType() != Material.AIR) {
             event.setCancelled(true);
         }
     }
 
 
     @EventHandler
-    public void onBlockBreak(BlockBreakEvent event){
-        if(Challenges.get().timer == null) return;
-        if(Challenges.get().timer.isUnPaused()) return;
+    public void onBlockBreak(BlockBreakEvent event) {
+        if (Challenges.get().timer == null) return;
+        if (Challenges.get().timer.isUnPaused()) return;
 
         event.setCancelled(true);
     }
 
 
     @EventHandler
-    public void onBlockPlace(BlockPlaceEvent event){
-        if(Challenges.get().timer == null) return;
-        if(Challenges.get().timer.isUnPaused()) return;
+    public void onBlockPlace(BlockPlaceEvent event) {
+        if (Challenges.get().timer == null) return;
+        if (Challenges.get().timer.isUnPaused()) return;
 
         event.setCancelled(true);
     }
 
 
     @EventHandler
-    public void onEntitySpawn(EntitySpawnEvent event){
-        if(Challenges.get().timer == null) return;
-        if(Challenges.get().timer.isUnPaused()) return;
+    public void onEntitySpawn(EntitySpawnEvent event) {
+        if (Challenges.get().timer == null) return;
+        if (Challenges.get().timer.isUnPaused()) return;
 
         event.setCancelled(true);
     }
 
 
     @EventHandler
-    public void onEntityDamage(EntityDamageEvent event){
-        if(Challenges.get().timer == null) return;
-        if(Challenges.get().timer.isUnPaused()) return;
+    public void onEntityDamage(EntityDamageEvent event) {
+        if (Challenges.get().timer == null) return;
+        if (Challenges.get().timer.isUnPaused()) return;
 
         event.setCancelled(true);
     }
 
 
     @EventHandler
-    public void onItemDespawn(ItemDespawnEvent event){
-        if(Challenges.get().timer == null) return;
-        if(Challenges.get().timer.isUnPaused()) return;
+    public void onItemDespawn(ItemDespawnEvent event) {
+        if (Challenges.get().timer == null) return;
+        if (Challenges.get().timer.isUnPaused()) return;
 
         event.setCancelled(true);
     }
 
 
     @EventHandler
-    public void onPlayerDropItem(PlayerDropItemEvent event){
-        if(Challenges.get().timer == null) return;
-        if(Challenges.get().timer.isUnPaused()) return;
-        if(event.getPlayer().getGameMode() == GameMode.CREATIVE) return;
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        if (Challenges.get().timer == null) return;
+        if (Challenges.get().timer.isUnPaused()) return;
+        if (event.getPlayer().getGameMode() == GameMode.CREATIVE) return;
 
         event.setCancelled(true);
     }
 
 
     @EventHandler
-    public void onBlockDropItem(BlockDropItemEvent event){
-        if(Challenges.get().timer == null) return;
-        if(Challenges.get().timer.isUnPaused()) return;
+    public void onBlockDropItem(BlockDropItemEvent event) {
+        if (Challenges.get().timer == null) return;
+        if (Challenges.get().timer.isUnPaused()) return;
 
         event.setCancelled(true);
     }
 
 
     @EventHandler
-    public void onPlayerItemDamage(PlayerItemDamageEvent event){
-        if(Challenges.get().timer == null) return;
-        if(Challenges.get().timer.isUnPaused()) return;
+    public void onPlayerItemDamage(PlayerItemDamageEvent event) {
+        if (Challenges.get().timer == null) return;
+        if (Challenges.get().timer.isUnPaused()) return;
 
         event.setCancelled(true);
     }
 
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event){
-        if(Challenges.get().timer == null) return;
-        if(Challenges.get().timer.isUnPaused()) return;
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        if (Challenges.get().timer == null) return;
+        if (Challenges.get().timer.isUnPaused()) return;
 
         event.setCancelled(true);
     }
 
 
-
-
-
-
-    public void onTimerPause(){
+    public void onTimerPause() {
         toggleAIOOfEntitys(true);
         updateGameRules(false);
     }
@@ -140,15 +136,14 @@ public class TimerPauseDisable implements Listener {
     }
 
     private void updateAIOfEntity(Entity entity, boolean disable) {
-        if(entity instanceof LivingEntity) {
-            if(disable) {
-                if(!disabledEntities.contains(entity)) {
+        if (entity instanceof LivingEntity) {
+            if (disable) {
+                if (!disabledEntities.contains(entity)) {
                     disabledEntities.add((LivingEntity) entity);
                     ((LivingEntity) entity).setAI(false);
                 }
-            }
-            else {
-                if(disabledEntities.contains(entity)) {
+            } else {
+                if (disabledEntities.contains(entity)) {
                     disabledEntities.remove(entity);
                     ((LivingEntity) entity).setAI(true);
                 }
@@ -165,14 +160,15 @@ public class TimerPauseDisable implements Listener {
                 })
         );
     }
+
     private void updateGameRules(boolean disable) {
-        for(World world : Bukkit.getWorlds()){
-            if(!disable){
+        for (World world : Bukkit.getWorlds()) {
+            if (!disable) {
                 DO_DAYLIGHT_CYCLE = Boolean.TRUE.equals(world.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE));
                 DO_WEATHER_CYCLE = Boolean.TRUE.equals(world.getGameRuleValue(GameRule.DO_WEATHER_CYCLE));
                 DO_MOB_SPAWNING = Boolean.TRUE.equals(world.getGameRuleValue(GameRule.DO_MOB_SPAWNING));
                 DO_FIRE_TICK = Boolean.TRUE.equals(world.getGameRuleValue(GameRule.DO_FIRE_TICK));
-                RANDOM_TICK_SPEED = world.getGameRuleValue(GameRule.RANDOM_TICK_SPEED);
+                RANDOM_TICK_SPEED = Math.max(3, world.getGameRuleValue(GameRule.RANDOM_TICK_SPEED));
             }
 
 
@@ -180,7 +176,7 @@ public class TimerPauseDisable implements Listener {
             world.setGameRule(GameRule.DO_WEATHER_CYCLE, disable && DO_WEATHER_CYCLE);
             world.setGameRule(GameRule.DO_MOB_SPAWNING, disable && DO_MOB_SPAWNING);
             world.setGameRule(GameRule.DO_FIRE_TICK, disable && DO_FIRE_TICK);
-            world.setGameRule(GameRule.RANDOM_TICK_SPEED, !disable?RANDOM_TICK_SPEED:0);
+            world.setGameRule(GameRule.RANDOM_TICK_SPEED, disable ? 0 : RANDOM_TICK_SPEED);
         }
     }
 }

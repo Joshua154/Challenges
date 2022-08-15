@@ -15,7 +15,7 @@ import java.util.*;
 
 public class BlockRandomizer extends Mod {
     public BlockRandomizer() {
-        super("Block Randomizer", Material.BEACON, ModManager.ModType.GAME_MODIFICATION, ModManager.ModStatus.WORK_IN_PROGRESS);
+        super("Block Randomizer", "br", Material.BEACON, ModManager.ModType.GAME_MODIFICATION, ModManager.ModStatus.WORK_IN_PROGRESS, "Randomizes all block drops.");
     }
 
     private final Map<Material, Material> partners = UTILS.shuffle(List.of(Material.values()), "block");
@@ -43,7 +43,7 @@ public class BlockRandomizer extends Mod {
     }
 
     @Override
-    public String generateConfigString(){
+    public String generateConfigString() {
         Gson gson = new Gson();
         JsonObject config = new JsonObject("{\"" + super.getName().replaceAll(" ", "_") + ".partners\":" + gson.toJson(partners) + "}");
         return config.toString();

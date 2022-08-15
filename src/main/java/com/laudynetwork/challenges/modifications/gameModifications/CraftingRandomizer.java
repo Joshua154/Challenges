@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class CraftingRandomizer extends Mod {
     public CraftingRandomizer() {
-        super("Crafting Randomizer", Material.BEACON, ModManager.ModType.GAME_MODIFICATION, ModManager.ModStatus.WORK_IN_PROGRESS);
+        super("Crafting Randomizer", "cr", Material.BEACON, ModManager.ModType.GAME_MODIFICATION, ModManager.ModStatus.WORK_IN_PROGRESS, "Randomizes all crafting recipes.");
     }
 
     private final Map<Material, Material> partners = UTILS.shuffle(List.of(Material.values()), "item");
@@ -39,7 +39,7 @@ public class CraftingRandomizer extends Mod {
     }
 
     @Override
-    public String generateConfigString(){
+    public String generateConfigString() {
         Gson gson = new Gson();
         JsonObject config = new JsonObject("{\"" + super.getName().replaceAll(" ", "_") + ".partners\":" + gson.toJson(partners) + "}");
         return config.toString();

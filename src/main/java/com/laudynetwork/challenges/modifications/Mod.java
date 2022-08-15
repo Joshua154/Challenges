@@ -2,7 +2,6 @@ package com.laudynetwork.challenges.modifications;
 
 
 import com.laudynetwork.challenges.Challenges;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -13,30 +12,39 @@ import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
 public class Mod implements Listener, CommandExecutor, Comparable<Mod> {
-    @Getter
     protected String name;
-    @Getter
+    protected final String shortName;
+    protected final String description;
     protected Material material;
-    @Getter
     protected ModManager.ModType modType;
-    @Getter
     protected ModManager.ModStatus modStatus;
     protected boolean enabled = false;
 
-    public Mod(String name, Material material, ModManager.ModType modType, ModManager.ModStatus modStatus) {
+    public Mod(String name, String shortName, Material material, ModManager.ModType modType, ModManager.ModStatus modStatus, String description) {
         this.name = name;
+        this.shortName = shortName;
         this.material = material;
         this.modType = modType;
         this.modStatus = modStatus;
+        this.description = description;
+
+        Bukkit.getPluginManager().registerEvents(this, Challenges.get());
     }
 
     public void enable() {
-        Bukkit.getPluginManager().registerEvents(this, Challenges.get());
         enabled = true;
     }
 
     public void disable() {
         enabled = false;
+    }
+
+    public void toggle() {
+        if (enabled) {
+            disable();
+        } else {
+            enable();
+        }
     }
 
     @Override
@@ -53,19 +61,39 @@ public class Mod implements Listener, CommandExecutor, Comparable<Mod> {
         return "";
     }
 
-    public void parseConfig() {
+    /*public void parseConfig(String configString) {
 
-    }
+    }*/
 
     public ModManager.ModType getType() {
         return modType;
     }
 
     protected void failed(Player player, String cause) {
-        Bukkit.broadcastMessage(player.getName() + " failed the challenge: " + cause);
+        Challenges.get().getModManager().endChallenge(player, cause, true);
     }
 
     protected void complete(Player player, String cause) {
-        Bukkit.broadcastMessage(player.getName() + " ended the challenge: " + cause);
+        Challenges.get().getModManager().endChallenge(player, cause, false);
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getShortName() {
+        return shortName;
     }
 }
