@@ -7,9 +7,10 @@ import com.laudynetwork.challenges.modifications.challenges.NoDamage;
 import com.laudynetwork.challenges.modifications.challenges.NoDeath;
 import com.laudynetwork.challenges.modifications.gameModifications.BlockRandomizer;
 import com.laudynetwork.challenges.modifications.gameModifications.CraftingRandomizer;
+import com.laudynetwork.challenges.modifications.gameModifications.EntityLootRandomizer;
+import com.laudynetwork.challenges.modifications.gameModifications.EntitySpawnRandomizer;
 import com.laudynetwork.laudynetworkapi.chatutils.HexColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
@@ -24,18 +25,14 @@ public class ModManager {
         registerMod(new KillAllBosses());
         registerMod(new NoDamage());
         registerMod(new NoDeath());
-
-        //getMod("ked").enable();
-        //getMod("nda").enable();
     }
 
 
     public void registerGameMods() {
         registerMod(new BlockRandomizer());
         registerMod(new CraftingRandomizer());
-
-        //getMod("br").enable();
-        //getMod("cr").enable();
+        registerMod(new EntityLootRandomizer());
+        registerMod(new EntitySpawnRandomizer());
     }
 
     private static ModManager instance;
@@ -90,7 +87,7 @@ public class ModManager {
     }
 
     public enum ModType {
-        GAME_MODIFICATION("Game Mod", "mod", Color.RED, "Game Modifications"),
+        GAME_MODIFICATION("Game Mod", "mod", Color.YELLOW, "Game Modifications"),
         CHALLENGE("Challenge", "challenge", Color.RED, "Win/Lose Condition");
 
         private final String displayName;
@@ -103,6 +100,15 @@ public class ModManager {
             this.shortName = shortName;
             this.color = color;
             this.description = description;
+        }
+
+        public static boolean contains(String string) {
+            for (ModManager.ModType modType : ModManager.ModType.values()) {
+                if (modType.name().equals(string)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public String getDisplayName() {
@@ -118,7 +124,7 @@ public class ModManager {
         }
 
         public String getColorString() {
-            return ChatColor.COLOR_CHAR + "" + color.getRed() + color.getGreen() + color.getBlue();
+            return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
         }
 
         public String getDescription() {
@@ -127,17 +133,19 @@ public class ModManager {
     }
 
     public enum ModStatus {
-        OPEN("Open", Color.GREEN),
-        BETA("Beta", Color.YELLOW),
-        CLOSED_BETA("Closed Beta", Color.ORANGE),
-        WORK_IN_PROGRESS("Work in Progress", Color.RED);
+        OPEN("Open", Color.GREEN, ""),
+        BETA("Beta", Color.YELLOW, ""),
+        CLOSED_BETA("Closed Beta", Color.ORANGE, ""),
+        WORK_IN_PROGRESS("Work in Progress", Color.RED, "");
 
         private final String name;
         private final Color color;
+        private final String permission;
 
-        ModStatus(String name, Color color) {
+        ModStatus(String name, Color color, String permission) {
             this.name = name;
             this.color = color;
+            this.permission = permission;
         }
 
         public String getName() {
@@ -146,6 +154,10 @@ public class ModManager {
 
         public Color getColor() {
             return color;
+        }
+
+        public String getColorString() {
+            return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
         }
     }
 }

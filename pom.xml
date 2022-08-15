@@ -18,7 +18,7 @@
     <url>https://www.laudynetwork.com</url>
 
     <build>
-        <finalName>${name}</finalName>
+        <finalName>${project.name}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -112,9 +112,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-        <groupId>org.json</groupId>
-        <artifactId>json</artifactId>
-        <version>20220320</version>
-    </dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20220320</version>
+        </dependency>
     </dependencies>
 </project>

@@ -13,6 +13,7 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -132,5 +133,9 @@ public final class Challenges extends JavaPlugin implements Listener {
             }
         }
         return players;
+    }
+
+    public void addHiddenEntity(Entity entity) {
+        hiddenPlayerTeam.addEntry(entity.getUniqueId().toString());
     }
 }

@@ -14,13 +14,21 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class ModificationsScreen implements IGUI {
-    ItemStack pane = new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName(ChatColor.RED + "").build();
+public class ModScreen implements IGUI {
+    ItemStack pane = new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName(ChatColor.RED + "RETURN").build();
+    ModManager.ModType type;
+
+    public ModScreen(String type) {
+        this.type = ModManager.ModType.valueOf(type);
+    }
 
     @Override
     public void onClick(Player player, int i, ItemStack itemStack, boolean b) {
         if (itemStack == null) return;
-        if (itemStack.equals(pane)) return;
+        if (itemStack.equals(pane)) {
+            player.openInventory(new MainScreen().getInventory());
+            return;
+        }
         if (itemStack.getItemMeta() == null) return;
         if (itemStack.getItemMeta().getLocalizedName().isEmpty()) return;
 
@@ -31,7 +39,7 @@ public class ModificationsScreen implements IGUI {
     @NotNull
     @Override
     public Inventory getInventory() {
-        Inventory gui = Bukkit.createInventory(this, 9 * 6, "Modification Types");
+        Inventory gui = Bukkit.createInventory(this, 9 * 6, HexColor.translate(type.getColorString() + type.getDisplayName()));
         int count = 0;
         ItemStack[] items = new ItemStack[9 * 6];
         for (int i = 0; i < gui.getSize(); i++) {
@@ -39,10 +47,10 @@ public class ModificationsScreen implements IGUI {
                 items[i] = pane;
             } else {
 
-                if (count == ModManager.get().getMods().stream().filter(mod -> mod.getType().equals(ModManager.ModType.GAME_MODIFICATION)).count()) {
+                if (count == ModManager.get().getMods().stream().filter(mod -> mod.getType().equals(type)).count()) {
                     items[i] = new ItemStack(Material.AIR);
                 } else {
-                    items[i] = generateItem(ModManager.get().getMods().stream().filter(mod -> mod.getType().equals(ModManager.ModType.GAME_MODIFICATION)).toList().get(count));
+                    items[i] = generateItem(ModManager.get().getMods().stream().filter(mod -> mod.getType().equals(type)).toList().get(count));
                     count++;
                 }
             }
@@ -53,8 +61,10 @@ public class ModificationsScreen implements IGUI {
 
     private ItemStack generateItem(Mod mod) {
         return new ItemBuilder(mod.getMaterial())
-                .setDisplayName(HexColor.translate(ChatColor.BOLD + mod.getType().getColorString() + mod.getName()))
-                .setLore(mod.getDescription() + " " + (mod.isEnabled() ? ChatColor.GREEN + "Enabled" : ChatColor.DARK_RED + "Disabled"))
+                .setDisplayName(HexColor.translate(ChatColor.BOLD + mod.getColorString() + mod.getName()))
+                .setLore(HexColor.translate(mod.getDescription()),
+                        HexColor.translate(mod.getModStatus().getColorString() + mod.getModStatus().getName()),
+                        HexColor.translate((mod.isEnabled() ? ChatColor.GREEN + "Enabled" : ChatColor.DARK_RED + "Disabled")))
                 .setLocalizedName(mod.getShortName())
                 .build();
     }

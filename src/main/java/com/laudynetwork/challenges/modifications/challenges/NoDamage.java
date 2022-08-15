@@ -8,13 +8,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 
+import java.awt.*;
+
 public class NoDamage extends Mod {
     public NoDamage() {
         super("No Damage Challenge", "nda", Material.BARRIER, ModManager.ModType.CHALLENGE, ModManager.ModStatus.WORK_IN_PROGRESS, "No Damage Challenge");
+        super.color = Color.decode("#FF5555");
     }
 
     @EventHandler
     public void onDeath(EntityDamageEvent event) {
+        if (!this.enabled) return;
         if (event.getEntity() instanceof Player player) {
 
             if (Challenges.get().getPlayingPlayers().contains(player)) {

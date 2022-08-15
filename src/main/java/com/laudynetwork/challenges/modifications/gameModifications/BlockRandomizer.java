@@ -15,7 +15,7 @@ import java.util.*;
 
 public class BlockRandomizer extends Mod {
     public BlockRandomizer() {
-        super("Block Randomizer", "br", Material.BEACON, ModManager.ModType.GAME_MODIFICATION, ModManager.ModStatus.WORK_IN_PROGRESS, "Randomizes all block drops.");
+        super("Block Randomizer", "br", Material.BEACON, ModManager.ModType.GAME_MODIFICATION, ModManager.ModStatus.BETA, "Randomizes all block drops.");
     }
 
     private final Map<Material, Material> partners = UTILS.shuffle(List.of(Material.values()), "block");

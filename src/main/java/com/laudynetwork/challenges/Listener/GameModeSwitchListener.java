@@ -7,8 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
 
@@ -22,13 +20,13 @@ public class GameModeSwitchListener implements Listener {
             Challenges.get().removePlayingPlayer(event.getPlayer());
             event.getPlayer().setScoreboard(Challenges.get().getHiddenPlayerScoreBord());
             Challenges.get().getHiddenPlayerTeam().addEntry(event.getPlayer().getName());
-            event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, true, false));
+            //event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, true, false));
         } else {
             Challenges.get().removeHiddenPlayer(event.getPlayer());
             Challenges.get().addPlayingPlayer(event.getPlayer());
             event.getPlayer().setScoreboard(Challenges.get().getHiddenPlayerScoreBord());
             Challenges.get().getHiddenPlayerTeam().removeEntry(event.getPlayer().getName());
-            event.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
+            //event.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
         }
         updateVisibility();
     }

@@ -22,10 +22,8 @@ public class MainScreen implements IGUI {
         if (itemStack.getItemMeta() == null) return;
         if (itemStack.getItemMeta().getLocalizedName().isEmpty()) return;
 
-        if (itemStack.getItemMeta().getLocalizedName().equals("CHALLENGE")) {
-            player.openInventory(new ChallengesScreen().getInventory());
-        } else if (itemStack.getItemMeta().getLocalizedName().equals("GAME_MODIFICATION")) {
-            player.openInventory(new ModificationsScreen().getInventory());
+        if (ModManager.ModType.contains(itemStack.getItemMeta().getLocalizedName())) {
+            player.openInventory(new ModScreen(itemStack.getItemMeta().getLocalizedName()).getInventory());
         }
     }
 
@@ -53,8 +51,8 @@ public class MainScreen implements IGUI {
 
     private ItemStack generateItem(ModManager.ModType value) {
         return new ItemBuilder(Material.PAPER)
-                .setDisplayName(HexColor.translate(ChatColor.BOLD + value.getColorString() + value.name()))
-                .setLore(value.getDescription())
+                .setDisplayName(HexColor.translate(ChatColor.BOLD + value.getColorString() + value.getDisplayName()))
+                .setLore(HexColor.translate(value.getDescription()))
                 .setLocalizedName(value.name())
                 .build();
     }

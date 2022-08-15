@@ -5,6 +5,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
@@ -30,7 +31,7 @@ public class FunctionsOnTimerPause implements Listener {
     private int RANDOM_TICK_SPEED = 3;
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (Challenges.get().timer == null) return;
         if (Challenges.get().timer.isUnPaused()) return;
@@ -43,7 +44,7 @@ public class FunctionsOnTimerPause implements Listener {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
         if (Challenges.get().timer == null) return;
         if (Challenges.get().timer.isUnPaused()) return;
@@ -52,7 +53,7 @@ public class FunctionsOnTimerPause implements Listener {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockPlace(BlockPlaceEvent event) {
         if (Challenges.get().timer == null) return;
         if (Challenges.get().timer.isUnPaused()) return;
@@ -61,7 +62,7 @@ public class FunctionsOnTimerPause implements Listener {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntitySpawn(EntitySpawnEvent event) {
         if (Challenges.get().timer == null) return;
         if (Challenges.get().timer.isUnPaused()) return;
@@ -70,7 +71,7 @@ public class FunctionsOnTimerPause implements Listener {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamage(EntityDamageEvent event) {
         if (Challenges.get().timer == null) return;
         if (Challenges.get().timer.isUnPaused()) return;
@@ -79,7 +80,7 @@ public class FunctionsOnTimerPause implements Listener {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemDespawn(ItemDespawnEvent event) {
         if (Challenges.get().timer == null) return;
         if (Challenges.get().timer.isUnPaused()) return;
@@ -88,7 +89,7 @@ public class FunctionsOnTimerPause implements Listener {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         if (Challenges.get().timer == null) return;
         if (Challenges.get().timer.isUnPaused()) return;
@@ -98,7 +99,7 @@ public class FunctionsOnTimerPause implements Listener {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockDropItem(BlockDropItemEvent event) {
         if (Challenges.get().timer == null) return;
         if (Challenges.get().timer.isUnPaused()) return;
@@ -107,7 +108,7 @@ public class FunctionsOnTimerPause implements Listener {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerItemDamage(PlayerItemDamageEvent event) {
         if (Challenges.get().timer == null) return;
         if (Challenges.get().timer.isUnPaused()) return;
@@ -116,7 +117,7 @@ public class FunctionsOnTimerPause implements Listener {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (Challenges.get().timer == null) return;
         if (Challenges.get().timer.isUnPaused()) return;
@@ -163,19 +164,19 @@ public class FunctionsOnTimerPause implements Listener {
 
     private void updateGameRules(boolean disable) {
         for (World world : Bukkit.getWorlds()) {
-            if (!disable) {
+            /*if (!disable) {
                 DO_DAYLIGHT_CYCLE = Boolean.TRUE.equals(world.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE));
                 DO_WEATHER_CYCLE = Boolean.TRUE.equals(world.getGameRuleValue(GameRule.DO_WEATHER_CYCLE));
                 DO_MOB_SPAWNING = Boolean.TRUE.equals(world.getGameRuleValue(GameRule.DO_MOB_SPAWNING));
                 DO_FIRE_TICK = Boolean.TRUE.equals(world.getGameRuleValue(GameRule.DO_FIRE_TICK));
                 RANDOM_TICK_SPEED = Math.max(3, world.getGameRuleValue(GameRule.RANDOM_TICK_SPEED));
-            }
+            }*/
 
 
-            world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, disable && DO_DAYLIGHT_CYCLE);
-            world.setGameRule(GameRule.DO_WEATHER_CYCLE, disable && DO_WEATHER_CYCLE);
-            world.setGameRule(GameRule.DO_MOB_SPAWNING, disable && DO_MOB_SPAWNING);
-            world.setGameRule(GameRule.DO_FIRE_TICK, disable && DO_FIRE_TICK);
+            world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, disable ? false : DO_DAYLIGHT_CYCLE);
+            world.setGameRule(GameRule.DO_WEATHER_CYCLE, disable ? false : DO_WEATHER_CYCLE);
+            world.setGameRule(GameRule.DO_MOB_SPAWNING, disable ? false : DO_MOB_SPAWNING);
+            world.setGameRule(GameRule.DO_FIRE_TICK, disable ? false : DO_FIRE_TICK);
             world.setGameRule(GameRule.RANDOM_TICK_SPEED, disable ? 0 : RANDOM_TICK_SPEED);
         }
     }

@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
 
+import java.awt.*;
 import java.util.Objects;
 
 import static org.bukkit.entity.EntityType.*;
@@ -13,6 +14,7 @@ import static org.bukkit.entity.EntityType.*;
 public class KillAllBosses extends Mod {
     public KillAllBosses() {
         super("Kill All Bosses Challenge", "kab", Material.BEACON, ModManager.ModType.CHALLENGE, ModManager.ModStatus.WORK_IN_PROGRESS, "Kill All Bosses Challenge");
+        super.color = new Color(99, 15, 15);
     }
 
     private boolean killed_EnderDragon = false;
@@ -22,6 +24,7 @@ public class KillAllBosses extends Mod {
 
     @EventHandler
     public void onEnderDragonKill(EntityDeathEvent event) {
+        if (!this.enabled) return;
 
         if (event.getEntity().getType() == ENDER_DRAGON) {
             killed_EnderDragon = true;
