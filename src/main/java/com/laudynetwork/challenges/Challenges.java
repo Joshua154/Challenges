@@ -48,6 +48,11 @@ public final class Challenges extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        config.addDefault("PluginManagerConfig", true);
+        config.options().copyDefaults(true);
+        saveDefaultConfig();
+
+
         Bukkit.getPluginManager().registerEvents(timerPauseDisable, this);
         Bukkit.getPluginManager().registerEvents(new GameModeSwitchListener(), this);
         Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
@@ -70,11 +75,6 @@ public final class Challenges extends JavaPlugin implements Listener {
         hiddenPlayerTeam.setOption(Team.Option.DEATH_MESSAGE_VISIBILITY, Team.OptionStatus.NEVER);
 
 
-        config.addDefault("PluginManagerConfig", true);
-        config.options().copyDefaults(true);
-        saveDefaultConfig();
-
-
         timer = new Timer(false, 1, TimerMode.COUNTUP, DisplayMode.ACTIONBAR);
         timer.setPaused(true);
 
@@ -84,6 +84,9 @@ public final class Challenges extends JavaPlugin implements Listener {
         Objects.requireNonNull(getCommand("location")).setExecutor(new SaveLocationPoint());
         Objects.requireNonNull(getCommand("test")).setExecutor(new Test());
         Objects.requireNonNull(getCommand("gui")).setExecutor(new Select());
+        Objects.requireNonNull(getCommand("highlight")).setExecutor(new Highlight());
+
+
     }
 
     @Override

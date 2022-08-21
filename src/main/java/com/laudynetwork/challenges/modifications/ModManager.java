@@ -5,10 +5,11 @@ import com.laudynetwork.challenges.modifications.challenges.EnderDragonKill;
 import com.laudynetwork.challenges.modifications.challenges.KillAllBosses;
 import com.laudynetwork.challenges.modifications.challenges.NoDamage;
 import com.laudynetwork.challenges.modifications.challenges.NoDeath;
-import com.laudynetwork.challenges.modifications.gameModifications.BlockRandomizer;
-import com.laudynetwork.challenges.modifications.gameModifications.CraftingRandomizer;
-import com.laudynetwork.challenges.modifications.gameModifications.EntityLootRandomizer;
-import com.laudynetwork.challenges.modifications.gameModifications.EntitySpawnRandomizer;
+import com.laudynetwork.challenges.modifications.gameModifications.force.*;
+import com.laudynetwork.challenges.modifications.gameModifications.randomizer.BlockRandomizer;
+import com.laudynetwork.challenges.modifications.gameModifications.randomizer.CraftingRandomizer;
+import com.laudynetwork.challenges.modifications.gameModifications.randomizer.EntityLootRandomizer;
+import com.laudynetwork.challenges.modifications.gameModifications.randomizer.EntitySpawnRandomizer;
 import com.laudynetwork.laudynetworkapi.chatutils.HexColor;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -33,6 +34,13 @@ public class ModManager {
         registerMod(new CraftingRandomizer());
         registerMod(new EntityLootRandomizer());
         registerMod(new EntitySpawnRandomizer());
+
+
+        registerMod(new ForceBlock());
+        registerMod(new ForceItem());
+        registerMod(new ForceCoordinates());
+        registerMod(new ForceDamage());
+        registerMod(new ForceEntity());
     }
 
     private static ModManager instance;
@@ -54,7 +62,15 @@ public class ModManager {
     }
 
     public Mod getMod(String name) {
-        return mods.stream().filter(mod -> mod.getShortName().equals(name)).findFirst().orElse(null);
+        Mod result = mods.stream().filter(mod -> mod.getShortName().equals(name)).findFirst().orElse(null);
+        if (result != null) {
+            return result;
+        }
+        return mods.stream().filter(mod -> mod.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    public Mod getMod(Mod mod) {
+        return mods.stream().filter(mod1 -> mod1.equals(mod)).findFirst().orElse(null);
     }
 
     public void endChallenge(Player player, String cause, boolean failed) {

@@ -116,5 +116,11 @@
             <artifactId>json</artifactId>
             <version>20220320</version>
         </dependency>
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib</artifactId>
+            <version>4.7.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>

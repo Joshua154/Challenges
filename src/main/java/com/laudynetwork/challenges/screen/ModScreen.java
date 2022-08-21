@@ -10,9 +10,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ModScreen implements IGUI {
     ItemStack pane = new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName(ChatColor.RED + "RETURN").build();
@@ -23,7 +28,7 @@ public class ModScreen implements IGUI {
     }
 
     @Override
-    public void onClick(Player player, int i, ItemStack itemStack, boolean b) {
+    public void onClick(Player player, int i, ItemStack itemStack, ClickType clickType) {
         if (itemStack == null) return;
         if (itemStack.equals(pane)) {
             player.openInventory(new MainScreen().getInventory());
@@ -32,8 +37,12 @@ public class ModScreen implements IGUI {
         if (itemStack.getItemMeta() == null) return;
         if (itemStack.getItemMeta().getLocalizedName().isEmpty()) return;
 
-        Challenges.get().getModManager().getMod(itemStack.getItemMeta().getLocalizedName()).toggle();
-        player.openInventory(getInventory());
+        if (clickType.isLeftClick()) {
+            Challenges.get().getModManager().getMod(itemStack.getItemMeta().getLocalizedName()).toggle();
+            player.openInventory(getInventory());
+        } else if (clickType.isRightClick()) {
+            Challenges.get().getModManager().getMod(itemStack.getItemMeta().getLocalizedName()).onSettingsClick(player, i, itemStack, clickType);
+        }
     }
 
     @NotNull
@@ -60,12 +69,25 @@ public class ModScreen implements IGUI {
     }
 
     private ItemStack generateItem(Mod mod) {
+        List<String> lore = new ArrayList<>();
+
+        lore.add(HexColor.translate(mod.getDescription()));
+        lore.add(HexColor.translate(mod.getModStatus().getColorString() + mod.getModStatus().getName()));
+        lore.add((mod.isEnabled() ? ChatColor.GREEN + "Enabled" : ChatColor.DARK_RED + "Disabled"));
+
+        if (hasOnSettingsClick(mod)) {
+            lore.add(ChatColor.GREEN + "R-Click to configure");
+        }
+
+
         return new ItemBuilder(mod.getMaterial())
                 .setDisplayName(HexColor.translate(ChatColor.BOLD + mod.getColorString() + mod.getName()))
-                .setLore(HexColor.translate(mod.getDescription()),
-                        HexColor.translate(mod.getModStatus().getColorString() + mod.getModStatus().getName()),
-                        HexColor.translate((mod.isEnabled() ? ChatColor.GREEN + "Enabled" : ChatColor.DARK_RED + "Disabled")))
+                .setLore(lore)
                 .setLocalizedName(mod.getShortName())
                 .build();
+    }
+
+    private boolean hasOnSettingsClick(Mod mod) {
+        return Arrays.stream(mod.getClass().getDeclaredMethods()).anyMatch(method -> method.getName().equals("onSettingsClick"));
     }
 }

@@ -128,12 +128,12 @@ public class FunctionsOnTimerPause implements Listener {
 
     public void onTimerPause() {
         toggleAIOOfEntitys(true);
-        updateGameRules(false);
+        updateGameRules(true);
     }
 
     public void onTimerUnPause() {
         toggleAIOOfEntitys(false);
-        updateGameRules(true);
+        updateGameRules(false);
     }
 
     private void updateAIOfEntity(Entity entity, boolean disable) {
@@ -164,7 +164,7 @@ public class FunctionsOnTimerPause implements Listener {
 
     private void updateGameRules(boolean disable) {
         for (World world : Bukkit.getWorlds()) {
-            /*if (!disable) {
+            /*if (disable) {
                 DO_DAYLIGHT_CYCLE = Boolean.TRUE.equals(world.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE));
                 DO_WEATHER_CYCLE = Boolean.TRUE.equals(world.getGameRuleValue(GameRule.DO_WEATHER_CYCLE));
                 DO_MOB_SPAWNING = Boolean.TRUE.equals(world.getGameRuleValue(GameRule.DO_MOB_SPAWNING));

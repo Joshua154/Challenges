@@ -1,9 +1,18 @@
 package com.laudynetwork.challenges.util;
 
+import net.minecraft.server.v1_16_R3.Block;
+import net.minecraft.server.v1_16_R3.MaterialMapColor;
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 
 import java.util.*;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import net.md_5.bungee.api.ChatColor;
 
 public class UTILS {
     public static Map<Material, Material> shuffle(List<Material> materials, String matType) {
@@ -71,4 +80,31 @@ public class UTILS {
             LootTable lootTable = (LootTable) type.getEntityClass();
         }
     }*/
+
+
+    public static List<Material> getTypes(List<Material> materials, String matType) {
+        List<Material> result = new ArrayList<>();
+
+        for (Material mat : materials) {
+            if ((mat.isBlock() && matType.equals("block")) ||
+                    (mat.isItem() && matType.equals("item")) ||
+                    (mat.isSolid() && matType.equals("solid")) ||
+                    matType.equals("all")) {
+                result.add(mat);
+            }
+        }
+        return result;
+    }
+
+    public static Color getColorOfBlock(Material mat) {
+        int id = mat.getId();
+
+        MaterialMapColor colorMap = Block.getByCombinedId(id).getBlock().s();
+        return Color.fromBGR(colorMap.rgb);
+    }
+
+
+    public static String getHexColor(Color c) {
+        return String.format("#%02x%02x%02x", c.getRed(), c.getGreen(), c.getBlue());
+    }
 }

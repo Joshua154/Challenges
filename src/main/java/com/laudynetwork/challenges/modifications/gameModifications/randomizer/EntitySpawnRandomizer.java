@@ -1,4 +1,4 @@
-package com.laudynetwork.challenges.modifications.gameModifications;
+package com.laudynetwork.challenges.modifications.gameModifications.randomizer;
 
 import com.google.gson.Gson;
 import com.laudynetwork.challenges.Challenges;

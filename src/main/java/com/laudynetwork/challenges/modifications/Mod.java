@@ -2,6 +2,8 @@ package com.laudynetwork.challenges.modifications;
 
 
 import com.laudynetwork.challenges.Challenges;
+import com.laudynetwork.challenges.modifications.config.ChallengeConfig;
+import com.laudynetwork.challenges.modifications.config.ConfigEntry;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -9,10 +11,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Mod implements Listener, CommandExecutor, Comparable<Mod> {
     protected String name;
@@ -64,7 +69,8 @@ public class Mod implements Listener, CommandExecutor, Comparable<Mod> {
         return false;
     }
 
-    public void onSettingsClick(Player player, int slot, ItemStack itemStack, boolean shift) {
+    public void onSettingsClick(Player player, int slot, ItemStack itemStack, ClickType clickType) {
+        //
     }
 
     public void init() {

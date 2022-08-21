@@ -1,4 +1,4 @@
-package com.laudynetwork.challenges.modifications.gameModifications;
+package com.laudynetwork.challenges.modifications.gameModifications.randomizer;
 
 import com.google.gson.Gson;
 import com.laudynetwork.challenges.modifications.Mod;
@@ -6,34 +6,34 @@ import com.laudynetwork.challenges.modifications.ModManager;
 import com.laudynetwork.challenges.util.UTILS;
 import org.bson.json.JsonObject;
 import org.bukkit.Material;
-import org.bukkit.entity.Mob;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Map;
 
-public class EntityLootRandomizer extends Mod {
-    public EntityLootRandomizer() {
-        super("Entity Loot Randomizer", "elr", Material.BEACON, ModManager.ModType.GAME_MODIFICATION, ModManager.ModStatus.BETA, "Randomizes all Entity drops.");
+public class CraftingRandomizer extends Mod {
+    public CraftingRandomizer() {
+        super("Crafting Randomizer", "cr", Material.BEACON, ModManager.ModType.GAME_MODIFICATION, ModManager.ModStatus.BETA, "Randomizes all crafting recipes.");
     }
 
     public void init() {
         while (partners == null || !isPossible()) {
-            partners = UTILS.shuffle(List.of(Material.values()), "all");
+            partners = UTILS.shuffle(List.of(Material.values()), "item");
         }
     }
 
     private boolean isPossible() {
-        boolean enderPearl = false;
-        boolean blazeRod = false;
+        boolean enderEye = false;
+        boolean blazePowder = false;
         for (Material material : partners.keySet()) {
-            if (partners.get(material) == Material.ENDER_PEARL) {
-                enderPearl = true;
-            } else if (partners.get(material) == Material.BLAZE_ROD) {
-                blazeRod = true;
+            if (partners.get(material) == Material.ENDER_EYE) {
+                enderEye = true;
+            } else if (partners.get(material) == Material.BLAZE_POWDER) {
+                blazePowder = true;
             }
-            if (enderPearl && blazeRod) {
+            if (enderEye && blazePowder) {
                 return true;
             }
         }
@@ -44,15 +44,9 @@ public class EntityLootRandomizer extends Mod {
 
 
     @EventHandler
-    public void onEntityDeath(EntityDeathEvent event) {
+    public void onCraftItem(CraftItemEvent event) {
         if (this.enabled) {
-            if (event.getEntity() instanceof Mob) {
-                event.getDrops().forEach(item -> {
-                    if (partners.containsKey(item.getType())) {
-                        item.setType(getPartner(item.getType()));
-                    }
-                });
-            }
+            event.getInventory().setResult(new ItemStack(getPartner(event.getRecipe().getResult().getType())));
         }
     }
 
