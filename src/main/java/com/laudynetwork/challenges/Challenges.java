@@ -1,19 +1,20 @@
 package com.laudynetwork.challenges;
 
+import com.laudynetwork.challenges.Listener.FunctionsOnTimerPause;
 import com.laudynetwork.challenges.Listener.GameModeSwitchListener;
+import com.laudynetwork.challenges.Listener.JoinListener;
 import com.laudynetwork.challenges.commands.*;
-import com.laudynetwork.challenges.modifications.Mod;
 import com.laudynetwork.challenges.modifications.ModManager;
 import com.laudynetwork.challenges.timer.DisplayMode;
 import com.laudynetwork.challenges.timer.Timer;
 import com.laudynetwork.challenges.timer.TimerMode;
+import com.laudynetwork.laudynetworkapi.gui.GUIEH;
 import lombok.Getter;
-import net.minecraft.server.v1_16_R3.ScoreboardTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
@@ -22,8 +23,6 @@ import org.bukkit.scoreboard.Team;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static org.bukkit.entity.EntityType.ENDER_DRAGON;
 
 public final class Challenges extends JavaPlugin implements Listener {
 
@@ -41,21 +40,23 @@ public final class Challenges extends JavaPlugin implements Listener {
     private Scoreboard hiddenPlayerScoreBord;
     @Getter
     private Team hiddenPlayerTeam;
-    FileConfiguration config = getConfig();
-
-    @Getter
-    private final TimerPauseDisable timerPauseDisable = new TimerPauseDisable();
 
     private final List<Player> hiddenPlayers = new ArrayList<>();
-
+    FileConfiguration config = getConfig();
     @Getter
-    private final List<Player> playingPlayers = new ArrayList<>();
-
+    private final FunctionsOnTimerPause timerPauseDisable = new FunctionsOnTimerPause();
 
     @Override
     public void onEnable() {
+        config.addDefault("PluginManagerConfig", true);
+        config.options().copyDefaults(true);
+        saveDefaultConfig();
+
+
         Bukkit.getPluginManager().registerEvents(timerPauseDisable, this);
         Bukkit.getPluginManager().registerEvents(new GameModeSwitchListener(), this);
+        Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
+        Bukkit.getPluginManager().registerEvents(new GUIEH(), this);
 
         modManager = new ModManager();
         modManager.registerChallenges();
@@ -74,12 +75,6 @@ public final class Challenges extends JavaPlugin implements Listener {
         hiddenPlayerTeam.setOption(Team.Option.DEATH_MESSAGE_VISIBILITY, Team.OptionStatus.NEVER);
 
 
-
-        config.addDefault("PluginManagerConfig", true);
-        config.options().copyDefaults(true);
-        saveDefaultConfig();
-
-
         timer = new Timer(false, 1, TimerMode.COUNTUP, DisplayMode.ACTIONBAR);
         timer.setPaused(true);
 
@@ -88,12 +83,16 @@ public final class Challenges extends JavaPlugin implements Listener {
         Objects.requireNonNull(getCommand("timer")).setExecutor(new TimerCommand());
         Objects.requireNonNull(getCommand("location")).setExecutor(new SaveLocationPoint());
         Objects.requireNonNull(getCommand("test")).setExecutor(new Test());
+        Objects.requireNonNull(getCommand("gui")).setExecutor(new Select());
+        Objects.requireNonNull(getCommand("highlight")).setExecutor(new Highlight());
+
+
     }
 
     @Override
     public void onDisable() {
         //Plugin shutdown logic
-        if(this.timer != null) {
+        if (this.timer != null) {
             config.set("timer.time", timer.getTime());
             config.set("timer.display-mode", timer.getDisplayMode());
             config.set("timer.timer-mode", timer.getTimerMode());
@@ -101,15 +100,12 @@ public final class Challenges extends JavaPlugin implements Listener {
     }
 
     @Override
-    public void onLoad() { instance = this; }
+    public void onLoad() {
+        instance = this;
+    }
 
-    public static Challenges get(){ return instance; }
-
-    @EventHandler
-    public void onEnderDragonKill(org.bukkit.event.entity.EntityDeathEvent event) {
-        if(event.getEntity().getType() == ENDER_DRAGON) {
-            Bukkit.broadcastMessage("Ender Dragon Killed");
-        }
+    public static Challenges get() {
+        return instance;
     }
 
     public void addHiddenPlayer(Player player) {
@@ -125,10 +121,24 @@ public final class Challenges extends JavaPlugin implements Listener {
     }
 
     public void addPlayingPlayer(Player player) {
-        playingPlayers.add(player);
+        removeHiddenPlayer(player);
     }
 
     public void removePlayingPlayer(Player player) {
-        playingPlayers.add(player);
+        addHiddenPlayer(player);
+    }
+
+    public List<Player> getPlayingPlayers() {
+        List<Player> players = new ArrayList<>();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!hiddenPlayers.contains(player)) {
+                players.add(player);
+            }
+        }
+        return players;
+    }
+
+    public void addHiddenEntity(Entity entity) {
+        hiddenPlayerTeam.addEntry(entity.getUniqueId().toString());
     }
 }
