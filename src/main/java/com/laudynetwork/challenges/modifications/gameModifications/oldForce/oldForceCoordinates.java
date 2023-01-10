@@ -1,15 +1,13 @@
-package com.laudynetwork.challenges.modifications.gameModifications.force;
+package com.laudynetwork.challenges.modifications.gameModifications.oldForce;
 
+import com.laudynetwork.challenges.api.chatutils.HexColor;
+import com.laudynetwork.challenges.api.chatutils.TextUtils;
 import com.laudynetwork.challenges.Challenges;
-import com.laudynetwork.challenges.blockHighlight.BlockHighlight;
-import com.laudynetwork.challenges.blockHighlight.Util;
-import com.laudynetwork.challenges.modifications.Mod;
+import com.laudynetwork.challenges.modifications.GameMod;
 import com.laudynetwork.challenges.modifications.ModManager;
 import com.laudynetwork.challenges.modifications.config.ChallengeConfig;
 import com.laudynetwork.challenges.modifications.config.ConfigEntry;
-import com.laudynetwork.challenges.util.IntObjekt;
-import com.laudynetwork.laudynetworkapi.chatutils.HexColor;
-import com.laudynetwork.laudynetworkapi.chatutils.TextUtils;
+import com.laudynetwork.challenges.util.DoubleObject;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -29,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ForceCoordinates extends Mod {
+public class oldForceCoordinates extends GameMod {
     private int timeLeft = 1;
     private int delay;
 
@@ -39,19 +37,19 @@ public class ForceCoordinates extends Mod {
     private final int range = 60 * 2;
     private boolean completed = true;
     public ChallengeConfig challengeConfig;
-    private final IntObjekt delayBetweenForces = new IntObjekt(60 * 7, 60 * 7, 60 * 10);
-    private final IntObjekt timeToCompleteForce = new IntObjekt(60 * 2, 60 * 2, 60 * 5);
-    private final IntObjekt xVar = new IntObjekt(1);
-    private final IntObjekt yVar = new IntObjekt(1);
-    private final IntObjekt zVar = new IntObjekt(1);
+    private final DoubleObject delayBetweenForces = new DoubleObject(60 * 7, 60 * 7, 60 * 10);
+    private final DoubleObject timeToCompleteForce = new DoubleObject(60 * 2, 60 * 2, 60 * 5);
+    private final DoubleObject xVar = new DoubleObject(1);
+    private final DoubleObject yVar = new DoubleObject(1);
+    private final DoubleObject zVar = new DoubleObject(1);
     private final Vector forceVector = new Vector(0, 0, 0);
     private Vector startPosition = new Vector(0, 0, 0);
     private BossBar bar = Bukkit.createBossBar("", BarColor.RED, BarStyle.SOLID);
     private BossBar specBar = Bukkit.createBossBar("", BarColor.RED, BarStyle.SOLID);
 
 
-    public ForceCoordinates() {
-        super("Force Coordinates", "fc", Material.BLAZE_ROD, ModManager.ModType.GAME_MODIFICATION, ModManager.ModStatus.BETA, "Forces a block to be on in a Specific Time.");
+    public oldForceCoordinates() {
+        super("Force Coordinates", "ofc", Material.BLAZE_ROD, ModManager.ModType.PLAYER, ModManager.ModStatus.BETA, "Forces a block to be on in a Specific Time.");
 
         List<ConfigEntry> configEntries = new ArrayList<>();
 
@@ -82,7 +80,7 @@ public class ForceCoordinates extends Mod {
 
     private void generateNewDelay() {
         Random random = new Random();
-        delay = random.nextInt(delayBetweenForces.min, delayBetweenForces.max + 1);
+        delay = random.nextInt(delayBetweenForces.getIntMin(), delayBetweenForces.getIntMax() + 1);
         orgDelay = delay;
 
         for (Player player : Challenges.get().getHiddenPlayers()) {
@@ -92,7 +90,7 @@ public class ForceCoordinates extends Mod {
 
     private void generateNewTimeToComplete() {
         Random random = new Random();
-        timeLeft = random.nextInt(timeToCompleteForce.min, timeToCompleteForce.max + 1);
+        timeLeft = random.nextInt(timeToCompleteForce.getIntMin(), timeToCompleteForce.getIntMax() + 1);
         orgTimeLeft = timeLeft;
 
         bar.setVisible(true);
@@ -161,11 +159,11 @@ public class ForceCoordinates extends Mod {
             public void run() {
                 Vector to = startPosition.clone().add(forceVector);
 
-                if (xVar.isTrue() && yVar.isTrue() && zVar.isTrue()) {
+                /*if (xVar.isTrue() && yVar.isTrue() && zVar.isTrue()) {
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         Util.sendBlockHighlight(player, new BlockHighlight(to, new Color(0, 255, 0, 50), "The Coordinates", 1000));
                     }
-                }
+                }*/
 
                 if (!Challenges.get().timer.isRunning()) return;
                 if (!enabled) return;
@@ -209,8 +207,10 @@ public class ForceCoordinates extends Mod {
     }
 
     @Override
-    public void onSettingsClick(Player player, int slot, ItemStack itemStack, ClickType clickType) {
-        player.openInventory(challengeConfig.getInventory());
+    public void onClick(Player player, int slot, ItemStack itemStack, ClickType clickType) {
+        if (clickType.isRightClick()) {
+            player.openInventory(challengeConfig.getInventory());
+        }
     }
 
     private void walkedToCord(Player player) {

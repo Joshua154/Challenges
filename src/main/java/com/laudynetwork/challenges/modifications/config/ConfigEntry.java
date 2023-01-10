@@ -1,8 +1,9 @@
 package com.laudynetwork.challenges.modifications.config;
 
-import com.laudynetwork.challenges.util.IntObjekt;
-import com.laudynetwork.laudynetworkapi.builder.ItemBuilder;
-import com.laudynetwork.laudynetworkapi.chatutils.HexColor;
+import com.laudynetwork.challenges.api.chatutils.HexColor;
+import com.laudynetwork.challenges.util.DoubleObject;
+import com.laudynetwork.networkutils.api.item.itembuilder.ItemBuilder;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -16,14 +17,13 @@ public class ConfigEntry {
     public ConfigEntryType type;
     private Material activeMaterial = Material.LIME_STAINED_GLASS_PANE;
     private final Material inactiveMaterial = Material.RED_STAINED_GLASS_PANE;
-    private final IntObjekt settingsVariables;
+    private final DoubleObject settingsVariables;
 
 
     private int amplifier = 5;
-    private int step = 1;
 
 
-    public ConfigEntry(String name, List<String> description, IntObjekt settingsVariables, ConfigEntryType type) {
+    public ConfigEntry(String name, List<String> description, DoubleObject settingsVariables, ConfigEntryType type) {
         this.name = name;
         this.description = description;
         this.settingsVariables = settingsVariables;
@@ -31,7 +31,7 @@ public class ConfigEntry {
     }
 
 
-    public ConfigEntry(String name, List<String> description, IntObjekt settingsVariables, ConfigEntryType type, Material material) {
+    public ConfigEntry(String name, List<String> description, DoubleObject settingsVariables, ConfigEntryType type, Material material) {
         this.name = name;
         this.description = description;
         this.settingsVariables = settingsVariables;
@@ -40,21 +40,21 @@ public class ConfigEntry {
     }
 
     public ItemStack getItem() {
-        List<String> tempLore = new ArrayList<>();
+        ArrayList<Component> tempLore = new ArrayList<>();
         if (description != null) {
             for (String s : description) {
-                tempLore.add(HexColor.translate(s.replace("{{variable}}", settingsVariables.value + "")));
+                tempLore.add(Component.text(HexColor.translate(s.replace("{{variable}}", settingsVariables.value + ""))));
             }
         }
 
         if (type == ConfigEntryType.TOGGLE) {
-            tempLore.add(HexColor.translate("#FFFFFFClick to toggle"));
-            return new ItemBuilder(settingsVariables.value == 0 ? inactiveMaterial : activeMaterial).setDisplayName(HexColor.translate(name)).setLore(tempLore).build();
+            tempLore.add(Component.text(HexColor.translate("#FFFFFFClick to toggle")));
+            return new ItemBuilder(settingsVariables.value == 0 ? inactiveMaterial : activeMaterial).displayName(Component.text(HexColor.translate(name))).lore(tempLore).build();
         } else {
-            tempLore.add(HexColor.translate("#00FF00L-Click #FFFFFFto increase by #00FF00" + step));
-            tempLore.add(HexColor.translate("#00FF00R-Click #FFFFFFto decrease by #00FF00" + step));
-            tempLore.add(HexColor.translate("#00FF00SHIFT #FFFFFFto amplify by #00FF00" + amplifier));
-            return new ItemBuilder(activeMaterial).setDisplayName(HexColor.translate(name)).setLore(tempLore).build();
+            tempLore.add(Component.text(HexColor.translate("#00FF00L-Click #FFFFFFto increase by #00FF00" + settingsVariables.stepSize)));
+            tempLore.add(Component.text(HexColor.translate("#00FF00R-Click #FFFFFFto decrease by #00FF00" + settingsVariables.stepSize)));
+            tempLore.add(Component.text(HexColor.translate("#00FF00SHIFT #FFFFFFto amplify by #00FF00" + amplifier)));
+            return new ItemBuilder(activeMaterial).displayName(Component.text(HexColor.translate(name))).lore(tempLore).build();
         }
     }
 
@@ -64,21 +64,21 @@ public class ConfigEntry {
         } else {
             if (clickType == ClickType.LEFT) {
                 if (settingsVariables.value < settingsVariables.max) {
-                    settingsVariables.value += step;
+                    settingsVariables.value += settingsVariables.stepSize;
                 }
             } else if (clickType == ClickType.RIGHT) {
                 if (settingsVariables.value > settingsVariables.min) {
-                    settingsVariables.value -= step;
+                    settingsVariables.value -= settingsVariables.stepSize;
                 }
             } else if (clickType == ClickType.SHIFT_LEFT) {
-                if (settingsVariables.value + step * amplifier < settingsVariables.max) {
-                    settingsVariables.value += step * amplifier;
+                if (settingsVariables.value + settingsVariables.stepSize * amplifier < settingsVariables.max) {
+                    settingsVariables.value += settingsVariables.stepSize * amplifier;
                 } else {
                     settingsVariables.value = settingsVariables.max;
                 }
             } else if (clickType == ClickType.SHIFT_RIGHT) {
-                if (settingsVariables.value - step * amplifier > settingsVariables.min) {
-                    settingsVariables.value -= step * amplifier;
+                if (settingsVariables.value - settingsVariables.stepSize * amplifier > settingsVariables.min) {
+                    settingsVariables.value -= settingsVariables.stepSize * amplifier;
                 } else {
                     settingsVariables.value = settingsVariables.min;
                 }

@@ -1,21 +1,23 @@
 package com.laudynetwork.challenges.modifications.gameModifications.randomizer;
 
-import com.google.gson.Gson;
-import com.laudynetwork.challenges.modifications.Mod;
+import com.laudynetwork.challenges.Challenges;
+import com.laudynetwork.challenges.modifications.GameMod;
 import com.laudynetwork.challenges.modifications.ModManager;
 import com.laudynetwork.challenges.util.UTILS;
-import org.bson.json.JsonObject;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Map;
 
-public class CraftingRandomizer extends Mod {
+public class CraftingRandomizer extends GameMod {
     public CraftingRandomizer() {
-        super("Crafting Randomizer", "cr", Material.BEACON, ModManager.ModType.GAME_MODIFICATION, ModManager.ModStatus.BETA, "Randomizes all crafting recipes.");
+        super("Crafting Randomizer", "cr", Material.BEACON, ModManager.ModType.PLAYER, ModManager.ModStatus.BETA, "Randomizes all crafting recipes.");
     }
 
     public void init() {
@@ -46,8 +48,19 @@ public class CraftingRandomizer extends Mod {
     @EventHandler
     public void onCraftItem(CraftItemEvent event) {
         if (this.enabled) {
-            event.getInventory().setResult(new ItemStack(getPartner(event.getRecipe().getResult().getType())));
+            event.getInventory().setResult(new ItemStack(getPartner(event.getRecipe().getResult().getType()), event.getRecipe().getResult().getAmount()));
         }
+    }
+
+    @EventHandler
+    public void onItemMove(InventoryClickEvent event) {
+        if (!this.enabled) return;
+        if (!event.getSlotType().equals(InventoryType.SlotType.CRAFTING)) return;
+        Bukkit.getScheduler().runTaskLater(Challenges.get(), () -> {
+            if((event.getInventory().getItem(0) != null)){
+                event.getInventory().setItem(0, new ItemStack(getPartner(event.getInventory().getItem(0).getType())));
+            }
+        }, 1L);
     }
 
     private Material getPartner(Material material) {
@@ -60,12 +73,12 @@ public class CraftingRandomizer extends Mod {
         return partner;
     }
 
-    @Override
+    /*@Override
     public String generateConfigString() {
         Gson gson = new Gson();
         JsonObject config = new JsonObject("{\"" + super.getName().replaceAll(" ", "_") + ".partners\":" + gson.toJson(partners) + "}");
         return config.toString();
-    }
+    }*/
 
     /*@Override
     public void loadConfig(String configString) {

@@ -1,32 +1,24 @@
 package com.laudynetwork.challenges.modifications.gameModifications.randomizer;
 
-import com.google.gson.Gson;
-import com.laudynetwork.challenges.modifications.Mod;
+import com.laudynetwork.challenges.modifications.GameMod;
 import com.laudynetwork.challenges.modifications.ModManager;
 import com.laudynetwork.challenges.modifications.config.ChallengeConfig;
 import com.laudynetwork.challenges.modifications.config.ConfigEntry;
-import com.laudynetwork.challenges.util.IntObjekt;
+import com.laudynetwork.challenges.util.DoubleObject;
 import com.laudynetwork.challenges.util.UTILS;
-import net.minecraft.server.v1_16_R3.*;
-import org.bson.json.JsonObject;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_16_R3.util.CraftMagicNumbers;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
-public class BlockRandomizer extends Mod {
+public class BlockRandomizer extends GameMod {
     public BlockRandomizer() {
-        super("Block Randomizer", "br", Material.BEACON, ModManager.ModType.GAME_MODIFICATION, ModManager.ModStatus.BETA, "Randomizes all block drops.");
+        super("Block Randomizer", "br", Material.BEACON, ModManager.ModType.PLAYER, ModManager.ModStatus.BETA, "Randomizes all block drops.");
 
 
         List<ConfigEntry> configEntries = new ArrayList<>();
@@ -48,7 +40,7 @@ public class BlockRandomizer extends Mod {
     private Map<Material, Material> partners = null;
     public ChallengeConfig challengeConfig;
 
-    private final IntObjekt dropItemOnlyWithTool = new IntObjekt(1);
+    private final DoubleObject dropItemOnlyWithTool = new DoubleObject(1);
 
 
     @EventHandler
@@ -62,7 +54,7 @@ public class BlockRandomizer extends Mod {
             ItemStack item = event.getPlayer().getInventory().getItem(event.getPlayer().getInventory().getHeldItemSlot());
             if (item == null) item = new ItemStack(Material.AIR);
 
-            if (!isUsableTool(item, event.getBlock().getType()) && dropItemOnlyWithTool.value >= 1) return;
+            //if (!isUsableTool(item, event.getBlock().getType()) && dropItemOnlyWithTool.value >= 1) return;
 
 
             event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(),
@@ -82,27 +74,14 @@ public class BlockRandomizer extends Mod {
     }
 
     @Override
-    public String generateConfigString() {
-        Gson gson = new Gson();
-        JsonObject config = new JsonObject("{\"" + super.getName().replaceAll(" ", "_") + ".partners\":" + gson.toJson(partners) + "}");
-        return config.toString();
-    }
-
-    /*@Override
-    public void loadConfig(String configString) {
-        org.json.JSONObject config = new org.json.JsonObject();
-        config.put("partners", partners);
-
-        partners = gson.fromJson(config.get("" + super.getName().replaceAll(" ", "_") + ".partners"), Map.class);
-    }*/
-
-    @Override
-    public void onSettingsClick(Player player, int slot, ItemStack itemStack, ClickType clickType) {
-        player.openInventory(challengeConfig.getInventory());
+    public void onClick(Player player, int slot, ItemStack itemStack, ClickType clickType) {
+        if (clickType.isRightClick()) {
+            player.openInventory(challengeConfig.getInventory());
+        }
     }
 
 
-    public static boolean isUsableTool(ItemStack tool, Material block) {
+    /*public static boolean isUsableTool(ItemStack tool, Material block) {
         Block nmsBlock = CraftMagicNumbers.getBlock(block);
         if (nmsBlock == null) {
             return false;
@@ -110,5 +89,5 @@ public class BlockRandomizer extends Mod {
         IBlockData data = nmsBlock.getBlockData();
         if (!data.isRequiresSpecialTool()) return true;
         return tool != null && tool.getType() != Material.AIR && org.bukkit.craftbukkit.v1_16_R3.util.CraftMagicNumbers.getItem(tool.getType()).canDestroySpecialBlock(data);
-    }
+    }*/
 }

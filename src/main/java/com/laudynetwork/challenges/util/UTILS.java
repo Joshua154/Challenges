@@ -1,18 +1,10 @@
 package com.laudynetwork.challenges.util;
 
-import net.minecraft.server.v1_16_R3.Block;
-import net.minecraft.server.v1_16_R3.MaterialMapColor;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 
 import java.util.*;
-
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import net.md_5.bungee.api.ChatColor;
 
 public class UTILS {
     public static Map<Material, Material> shuffle(List<Material> materials, String matType) {
@@ -96,12 +88,12 @@ public class UTILS {
         return result;
     }
 
-    public static Color getColorOfBlock(Material mat) {
+    /*public static Color getColorOfBlock(Material mat) {
         int id = mat.getId();
 
         MaterialMapColor colorMap = Block.getByCombinedId(id).getBlock().s();
         return Color.fromBGR(colorMap.rgb);
-    }
+    }*/
 
 
     public static String getHexColor(Color c) {

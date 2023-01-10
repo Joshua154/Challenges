@@ -2,8 +2,6 @@ package com.laudynetwork.challenges.modifications;
 
 
 import com.laudynetwork.challenges.Challenges;
-import com.laudynetwork.challenges.modifications.config.ChallengeConfig;
-import com.laudynetwork.challenges.modifications.config.ConfigEntry;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -16,24 +14,37 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
-public class Mod implements Listener, CommandExecutor, Comparable<Mod> {
+public class GameMod implements Listener, CommandExecutor, Comparable<GameMod> {
     protected String name;
     protected final String shortName;
     protected final String description;
+    protected ItemStack itemStack;
     protected Material material;
     protected Color color = Color.WHITE;
     protected ModManager.ModType modType;
     protected ModManager.ModStatus modStatus;
     protected boolean enabled = false;
     protected boolean init = false;
+    protected String permission = "*";
 
-    public Mod(String name, String shortName, Material material, ModManager.ModType modType, ModManager.ModStatus modStatus, String description) {
+    public GameMod(String name, String shortName, Material material, ModManager.ModType modType, ModManager.ModStatus modStatus, String description) {
         this.name = name;
         this.shortName = shortName;
+        this.itemStack = new ItemStack(material);
         this.material = material;
+        this.modType = modType;
+        this.modStatus = modStatus;
+        this.description = description;
+
+        Bukkit.getPluginManager().registerEvents(this, Challenges.get());
+    }
+
+    public GameMod(String name, String shortName, ItemStack itemStack, ModManager.ModType modType, ModManager.ModStatus modStatus, String description) {
+        this.name = name;
+        this.shortName = shortName;
+        this.itemStack = itemStack;
+        this.material = itemStack.getType();
         this.modType = modType;
         this.modStatus = modStatus;
         this.description = description;
@@ -56,11 +67,12 @@ public class Mod implements Listener, CommandExecutor, Comparable<Mod> {
             disable();
         } else {
             enable();
+            onUpdate();
         }
     }
 
     @Override
-    public int compareTo(@NotNull Mod mod) {
+    public int compareTo(@NotNull GameMod gameMod) {
         return 0;
     }
 
@@ -69,11 +81,26 @@ public class Mod implements Listener, CommandExecutor, Comparable<Mod> {
         return false;
     }
 
-    public void onSettingsClick(Player player, int slot, ItemStack itemStack, ClickType clickType) {
+    public void onClick(Player player, int slot, ItemStack itemStack, ClickType clickType) {
         //
     }
 
+    public void defaultClick(Player player, int slot, ItemStack itemStack, ClickType clickType) {
+        if (clickType.isLeftClick()) {
+            this.toggle();
+        }
+        if (!player.hasPermission("*")) {
+            return;
+        }
+
+        onClick(player, slot, itemStack, clickType);
+    }
+
     public void init() {
+        //
+    }
+
+    public void onUpdate() {
         //
     }
 
@@ -106,7 +133,11 @@ public class Mod implements Listener, CommandExecutor, Comparable<Mod> {
     }
 
     public Material getMaterial() {
-        return material;
+        return itemStack.getType();
+    }
+
+    public ItemStack getItemStack() {
+        return itemStack;
     }
 
     public String getName() {
@@ -127,5 +158,17 @@ public class Mod implements Listener, CommandExecutor, Comparable<Mod> {
 
     public String getColorString() {
         return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
+    }
+
+    public int compare(GameMod o2) {
+        return this.getName().compareTo(o2.getName());
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
     }
 }

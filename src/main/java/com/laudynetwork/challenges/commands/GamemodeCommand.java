@@ -1,7 +1,7 @@
 package com.laudynetwork.challenges.commands;
 
 import com.laudynetwork.challenges.Challenges;
-import com.laudynetwork.laudynetworkapi.chatutils.HexColor;
+import com.laudynetwork.challenges.api.chatutils.HexColor;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;

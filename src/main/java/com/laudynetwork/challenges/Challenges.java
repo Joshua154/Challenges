@@ -3,13 +3,15 @@ package com.laudynetwork.challenges;
 import com.laudynetwork.challenges.Listener.FunctionsOnTimerPause;
 import com.laudynetwork.challenges.Listener.GameModeSwitchListener;
 import com.laudynetwork.challenges.Listener.JoinListener;
-import com.laudynetwork.challenges.commands.*;
+import com.laudynetwork.challenges.api.gui.GUIEH;
+import com.laudynetwork.challenges.commands.GamemodeCommand;
+import com.laudynetwork.challenges.commands.SaveLocationPoint;
+import com.laudynetwork.challenges.commands.Select;
+import com.laudynetwork.challenges.commands.TimerCommand;
 import com.laudynetwork.challenges.modifications.ModManager;
 import com.laudynetwork.challenges.timer.DisplayMode;
 import com.laudynetwork.challenges.timer.Timer;
 import com.laudynetwork.challenges.timer.TimerMode;
-import com.laudynetwork.laudynetworkapi.gui.GUIEH;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -31,62 +33,30 @@ public final class Challenges extends JavaPlugin implements Listener {
     public static final String PREFIX = SECONDARY_COLOR + "[" + PRIMARY_COLOR + "ChallengeManager" + SECONDARY_COLOR + "] " + ChatColor.RESET;
 
     private static Challenges instance;
-    @Getter
     private ModManager modManager;
+    public ModManager getModManager(){ return modManager; }
+    //private SignManager signManager;
+    //public SignManager getSignManager(){ return signManager; }
 
     public Timer timer;
 
-    @Getter
     private Scoreboard hiddenPlayerScoreBord;
-    @Getter
+    public Scoreboard getHiddenPlayerScoreBord(){ return hiddenPlayerScoreBord; }
     private Team hiddenPlayerTeam;
+    public Team getHiddenPlayerTeam(){ return hiddenPlayerTeam; }
 
     private final List<Player> hiddenPlayers = new ArrayList<>();
     FileConfiguration config = getConfig();
-    @Getter
     private final FunctionsOnTimerPause timerPauseDisable = new FunctionsOnTimerPause();
+    public FunctionsOnTimerPause getTimerPauseDisable(){ return timerPauseDisable; }
+
+    public static void log(String s) {
+        System.out.println(s);
+    }
 
     @Override
     public void onEnable() {
-        config.addDefault("PluginManagerConfig", true);
-        config.options().copyDefaults(true);
-        saveDefaultConfig();
-
-
-        Bukkit.getPluginManager().registerEvents(timerPauseDisable, this);
-        Bukkit.getPluginManager().registerEvents(new GameModeSwitchListener(), this);
-        Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
-        Bukkit.getPluginManager().registerEvents(new GUIEH(), this);
-
-        modManager = new ModManager();
-        modManager.registerChallenges();
-        modManager.registerGameMods();
-
-
-        hiddenPlayerScoreBord = Objects.requireNonNull(Bukkit.getScoreboardManager()).getNewScoreboard();
-        hiddenPlayerScoreBord.registerNewTeam("hiddenPlayer");
-
-        hiddenPlayerTeam = hiddenPlayerScoreBord.getTeam("hiddenPlayer");
-        assert hiddenPlayerTeam != null;
-        hiddenPlayerTeam.setColor(ChatColor.DARK_GRAY);
-        hiddenPlayerTeam.setPrefix(ChatColor.ITALIC + "Spec" + ChatColor.RESET + " | ");
-        hiddenPlayerTeam.setCanSeeFriendlyInvisibles(true);
-        hiddenPlayerTeam.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
-        hiddenPlayerTeam.setOption(Team.Option.DEATH_MESSAGE_VISIBILITY, Team.OptionStatus.NEVER);
-
-
-        timer = new Timer(false, 1, TimerMode.COUNTUP, DisplayMode.ACTIONBAR);
-        timer.setPaused(true);
-
-
-        Objects.requireNonNull(getCommand("gamemode")).setExecutor(new GamemodeCommand());
-        Objects.requireNonNull(getCommand("timer")).setExecutor(new TimerCommand());
-        Objects.requireNonNull(getCommand("location")).setExecutor(new SaveLocationPoint());
-        Objects.requireNonNull(getCommand("test")).setExecutor(new Test());
-        Objects.requireNonNull(getCommand("gui")).setExecutor(new Select());
-        Objects.requireNonNull(getCommand("highlight")).setExecutor(new Highlight());
-
-
+        init();
     }
 
     @Override
@@ -101,6 +71,7 @@ public final class Challenges extends JavaPlugin implements Listener {
 
     @Override
     public void onLoad() {
+        //Bukkit.getPluginManager().registerEvents(this, this);
         instance = this;
     }
 
@@ -141,4 +112,56 @@ public final class Challenges extends JavaPlugin implements Listener {
     public void addHiddenEntity(Entity entity) {
         hiddenPlayerTeam.addEntry(entity.getUniqueId().toString());
     }
+
+    private void init() {
+        config.addDefault("PluginManagerConfig", true);
+        config.options().copyDefaults(true);
+        saveDefaultConfig();
+
+
+        modManager = new ModManager();
+        modManager.registerChallenges();
+        modManager.registerGameMods();
+
+        /*signManager = new SignManager(this);
+        signManager.init();*/
+
+        Bukkit.getPluginManager().registerEvents(timerPauseDisable, this);
+        Bukkit.getPluginManager().registerEvents(new GameModeSwitchListener(), this);
+        Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
+        Bukkit.getPluginManager().registerEvents(new GUIEH(), this);
+
+
+
+        hiddenPlayerScoreBord = Objects.requireNonNull(Bukkit.getScoreboardManager()).getNewScoreboard();
+        hiddenPlayerScoreBord.registerNewTeam("hiddenPlayer");
+
+        hiddenPlayerTeam = hiddenPlayerScoreBord.getTeam("hiddenPlayer");
+        assert hiddenPlayerTeam != null;
+        hiddenPlayerTeam.setColor(ChatColor.DARK_GRAY);
+        hiddenPlayerTeam.setPrefix(ChatColor.ITALIC + "Spec" + ChatColor.RESET + " | ");
+        hiddenPlayerTeam.setCanSeeFriendlyInvisibles(true);
+        hiddenPlayerTeam.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
+        hiddenPlayerTeam.setOption(Team.Option.DEATH_MESSAGE_VISIBILITY, Team.OptionStatus.NEVER);
+
+
+        timer = new Timer(false, 1, TimerMode.COUNTUP, DisplayMode.ACTIONBAR);
+        timer.setPaused(true);
+
+
+        Objects.requireNonNull(getCommand("gamemode")).setExecutor(new GamemodeCommand());
+        Objects.requireNonNull(getCommand("timer")).setExecutor(new TimerCommand());
+        Objects.requireNonNull(getCommand("location")).setExecutor(new SaveLocationPoint());
+        Objects.requireNonNull(getCommand("gui")).setExecutor(new Select());
+    }
+
+    /*@EventHandler
+    public void onServerLoadEvent(ServerLoadEvent event) {
+        if (!event.getType().equals(ServerLoadEvent.LoadType.STARTUP)) return;
+
+        while (event.getHandlers().getHandlerLists().size() > 0) {
+            continue;
+        }
+
+    }*/
 }

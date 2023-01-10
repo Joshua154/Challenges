@@ -1,8 +1,8 @@
 package com.laudynetwork.challenges.timer;
 
+import com.laudynetwork.challenges.api.chatutils.HexColor;
+import com.laudynetwork.challenges.api.chatutils.TextUtils;
 import com.laudynetwork.challenges.Challenges;
-import com.laudynetwork.laudynetworkapi.chatutils.HexColor;
-import com.laudynetwork.laudynetworkapi.chatutils.TextUtils;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -67,10 +67,9 @@ public class Timer {
     }
 
 
-
-    private void sendActionBar(){
-        for(Player player : Bukkit.getOnlinePlayers()){
-            if(!isRunning()){
+    private void sendActionBar() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!isRunning()) {
                 //continue;
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, HexColor.asTextComponent("#FF4545" + ChatColor.BOLD + "Timer pausiert"));
                 continue;
@@ -79,22 +78,22 @@ public class Timer {
         }
     }
 
-    private void run(){
+    private void run() {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if(displayMode == DisplayMode.ACTIONBAR){
+                if (displayMode == DisplayMode.ACTIONBAR) {
                     sendActionBar();
-                }else if (displayMode == DisplayMode.RETURN){
+                } else if (displayMode == DisplayMode.RETURN) {
                     return;
-                }else if(displayMode == DisplayMode.NOTHING){
+                } else if (displayMode == DisplayMode.NOTHING) {
                     return;
                 }
 
-                if(!isRunning()){
+                if (!isRunning()) {
                     return;
                 }
-                if(time <= 0){
+                if (time <= 0) {
                     running = false;
                     return;
                 }
@@ -108,7 +107,7 @@ public class Timer {
         paused = bool;
         if (bool) {
             Challenges.get().getTimerPauseDisable().onTimerPause();
-        }else {
+        } else {
             Challenges.get().getTimerPauseDisable().onTimerUnPause();
         }
     }

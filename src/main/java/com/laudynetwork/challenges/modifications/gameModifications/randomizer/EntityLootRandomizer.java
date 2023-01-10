@@ -1,10 +1,9 @@
 package com.laudynetwork.challenges.modifications.gameModifications.randomizer;
 
 import com.google.gson.Gson;
-import com.laudynetwork.challenges.modifications.Mod;
+import com.laudynetwork.challenges.modifications.GameMod;
 import com.laudynetwork.challenges.modifications.ModManager;
 import com.laudynetwork.challenges.util.UTILS;
-import org.bson.json.JsonObject;
 import org.bukkit.Material;
 import org.bukkit.entity.Mob;
 import org.bukkit.event.EventHandler;
@@ -13,9 +12,9 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import java.util.List;
 import java.util.Map;
 
-public class EntityLootRandomizer extends Mod {
+public class EntityLootRandomizer extends GameMod {
     public EntityLootRandomizer() {
-        super("Entity Loot Randomizer", "elr", Material.BEACON, ModManager.ModType.GAME_MODIFICATION, ModManager.ModStatus.BETA, "Randomizes all Entity drops.");
+        super("Entity Loot Randomizer", "elr", Material.BEACON, ModManager.ModType.PLAYER, ModManager.ModStatus.BETA, "Randomizes all Entities drops.");
     }
 
     public void init() {
@@ -66,12 +65,12 @@ public class EntityLootRandomizer extends Mod {
         return partner;
     }
 
-    @Override
+    /*@Override
     public String generateConfigString() {
         Gson gson = new Gson();
         JsonObject config = new JsonObject("{\"" + super.getName().replaceAll(" ", "_") + ".partners\":" + gson.toJson(partners) + "}");
         return config.toString();
-    }
+    }*/
 
     /*@Override
     public void loadConfig(String configString) {

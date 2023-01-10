@@ -2,10 +2,9 @@ package com.laudynetwork.challenges.modifications.gameModifications.randomizer;
 
 import com.google.gson.Gson;
 import com.laudynetwork.challenges.Challenges;
-import com.laudynetwork.challenges.modifications.Mod;
+import com.laudynetwork.challenges.modifications.GameMod;
 import com.laudynetwork.challenges.modifications.ModManager;
 import com.laudynetwork.challenges.util.UTILS;
-import org.bson.json.JsonObject;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -22,9 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class EntitySpawnRandomizer extends Mod {
+public class EntitySpawnRandomizer extends GameMod {
     public EntitySpawnRandomizer() {
-        super("Entity Spawn Randomizer", "esr", Material.BEACON, ModManager.ModType.GAME_MODIFICATION, ModManager.ModStatus.WORK_IN_PROGRESS, "Randomizes all Entity.");
+        super("Entity Spawn Randomizer", "esr", Material.BEACON, ModManager.ModType.PLAYER, ModManager.ModStatus.WORK_IN_PROGRESS, "Randomizes all Entities.");
     }
 
     public void init() {
@@ -114,22 +113,12 @@ public class EntitySpawnRandomizer extends Mod {
         return partner;
     }
 
-    /*private boolean canSpawn(Entity entity) {
-        EntityType converted = getPartner(entity.getType());
-        int mobCap = Bukkit.getWorlds().get(0).getLoadedChunks().length / 289 * MOB_CONST(converted)
-    }
-
-    private int MOB_CONST(Entity entity){
-        if(entity instanceof Monster) return 70;
-
-    }*/
-
-    @Override
+    /*@Override
     public String generateConfigString() {
         Gson gson = new Gson();
         JsonObject config = new JsonObject("{\"" + super.getName().replaceAll(" ", "_") + ".partners\":" + gson.toJson(partners) + "}");
         return config.toString();
-    }
+    }*/
 
     /*@Override
     public void loadConfig(String configString) {

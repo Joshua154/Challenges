@@ -1,10 +1,10 @@
 package com.laudynetwork.challenges.commands;
 
+import com.laudynetwork.challenges.api.chatutils.HexColor;
 import com.laudynetwork.challenges.Challenges;
 import com.laudynetwork.challenges.timer.DisplayMode;
 import com.laudynetwork.challenges.timer.Timer;
 import com.laudynetwork.challenges.timer.TimerMode;
-import com.laudynetwork.laudynetworkapi.chatutils.HexColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,16 +25,14 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(isNotAPlayer(sender)) return false;
-        if(args.length == 0) {
+        if (isNotAPlayer(sender)) return false;
+        if (args.length == 0) {
             handle(label, sender);
             return true;
-        }
-        else if(args.length == 1) {
+        } else if (args.length == 1) {
             handle(args[0], sender);
             return true;
-        }
-        else {
+        } else {
             sender.sendMessage(USAGE);
         }
 
@@ -49,26 +47,25 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
         return false;
     }
 
-    private boolean timerIsNotValid(){
+    private boolean timerIsNotValid() {
         return Challenges.get().timer == null;
     }
 
     private void handle(String label, CommandSender sender) {
         if (label.equalsIgnoreCase("start")) {
-            if(timerIsNotValid()) {
+            if (timerIsNotValid()) {
                 Challenges.get().timer = new Timer(true, 1, TimerMode.COUNTUP, DisplayMode.ACTIONBAR);
                 return;
             }
-            if(Challenges.get().timer.isRunning()) {
+            if (Challenges.get().timer.isRunning()) {
                 sender.sendMessage(Challenges.PREFIX + Challenges.SECONDARY_COLOR + "Timer ist bereits aktiv!");
             }
-        }
-        else if (label.equalsIgnoreCase("resume")) {
-            if(timerIsNotValid()) {
+        } else if (label.equalsIgnoreCase("resume")) {
+            if (timerIsNotValid()) {
                 sender.sendMessage(HexColor.translate(Challenges.PREFIX + Challenges.SECONDARY_COLOR + "Bitte starte zuerst einen Timer."));
                 return;
             }
-            if(Challenges.get().timer.isRunning()) {
+            if (Challenges.get().timer.isRunning()) {
                 sender.sendMessage(Challenges.PREFIX + Challenges.SECONDARY_COLOR + "Es ist kein Timer pausiert!");
                 return;
             }
@@ -76,9 +73,8 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
             Challenges.get().timer.setRunning(true);
             Challenges.get().timer.setPaused(false);
             disableAIOfEntitys(false);
-        }
-        else if (label.equalsIgnoreCase("reset")) {
-            if(timerIsNotValid()) {
+        } else if (label.equalsIgnoreCase("reset")) {
+            if (timerIsNotValid()) {
                 sender.sendMessage(HexColor.translate(Challenges.PREFIX + Challenges.SECONDARY_COLOR + "Bitte starte zuerst einen Timer."));
                 return;
             }
@@ -87,13 +83,12 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
             Challenges.get().timer.setPaused(false);
             sender.sendMessage(HexColor.translate(Challenges.PREFIX + Challenges.SECONDARY_COLOR + "Timer wurde resetet!"));
             disableAIOfEntitys(false);
-        }
-        else if (label.equalsIgnoreCase("pause")) {
-            if(timerIsNotValid()) {
+        } else if (label.equalsIgnoreCase("pause")) {
+            if (timerIsNotValid()) {
                 sender.sendMessage(HexColor.translate(Challenges.PREFIX + Challenges.SECONDARY_COLOR + "Bitte starte zuerst einen Timer."));
                 return;
             }
-            if(!Challenges.get().timer.isRunning()) {
+            if (!Challenges.get().timer.isRunning()) {
                 sender.sendMessage(Challenges.PREFIX + Challenges.SECONDARY_COLOR + "Es ist kein Timer aktiv!");
                 return;
             }
@@ -101,20 +96,19 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
             Challenges.get().timer.setRunning(false);
             Challenges.get().timer.setPaused(true);
             disableAIOfEntitys(true);
-        }
-        else if (label.equalsIgnoreCase("toggle")) {
-            if(timerIsNotValid()) {
+        } else if (label.equalsIgnoreCase("toggle")) {
+            if (timerIsNotValid()) {
                 Challenges.get().timer = new Timer(true, 1, TimerMode.COUNTUP, DisplayMode.ACTIONBAR);
                 return;
             }
-            if(Challenges.get().timer.isRunning()) {
+            if (Challenges.get().timer.isRunning()) {
                 Challenges.get().timer.setRunning(false);
                 Challenges.get().timer.setPaused(true);
                 disableAIOfEntitys(true);
                 sender.sendMessage(HexColor.translate(Challenges.PREFIX + Challenges.SECONDARY_COLOR + "Timer wurde pausiert!"));
                 return;
             }
-            if(!Challenges.get().timer.isRunning()) {
+            if (!Challenges.get().timer.isRunning()) {
                 Challenges.get().timer.setRunning(true);
                 Challenges.get().timer.setPaused(false);
                 disableAIOfEntitys(false);
@@ -126,8 +120,8 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(label.equalsIgnoreCase("timer")){
-            return new ArrayList<>(){{
+        if (label.equalsIgnoreCase("timer")) {
+            return new ArrayList<>() {{
                 add("start");
                 add("resume");
                 add("reset");
@@ -139,15 +133,14 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
     }
 
     public void updateAIOfEntity(Entity entity, boolean disable) {
-        if(entity instanceof LivingEntity) {
-            if(disable) {
-                if(!disabledEntities.contains(entity)) {
+        if (entity instanceof LivingEntity) {
+            if (disable) {
+                if (!disabledEntities.contains(entity)) {
                     disabledEntities.add(entity);
                     ((LivingEntity) entity).setAI(false);
                 }
-            }
-            else {
-                if(disabledEntities.contains(entity)) {
+            } else {
+                if (disabledEntities.contains(entity)) {
                     disabledEntities.remove(entity);
                     ((LivingEntity) entity).setAI(true);
                 }

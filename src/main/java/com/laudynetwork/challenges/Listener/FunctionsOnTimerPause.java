@@ -28,6 +28,7 @@ public class FunctionsOnTimerPause implements Listener {
     private boolean DO_WEATHER_CYCLE = true;
     private boolean DO_MOB_SPAWNING = true;
     private boolean DO_FIRE_TICK = true;
+    private boolean ANNOUNCE_ADVANCEMENTS = true;
     private int RANDOM_TICK_SPEED = 3;
 
 
@@ -165,11 +166,12 @@ public class FunctionsOnTimerPause implements Listener {
     private void updateGameRules(boolean disable) {
         for (World world : Bukkit.getWorlds()) {
             /*if (disable) {
-                DO_DAYLIGHT_CYCLE = Boolean.TRUE.equals(world.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE));
-                DO_WEATHER_CYCLE = Boolean.TRUE.equals(world.getGameRuleValue(GameRule.DO_WEATHER_CYCLE));
-                DO_MOB_SPAWNING = Boolean.TRUE.equals(world.getGameRuleValue(GameRule.DO_MOB_SPAWNING));
-                DO_FIRE_TICK = Boolean.TRUE.equals(world.getGameRuleValue(GameRule.DO_FIRE_TICK));
-                RANDOM_TICK_SPEED = Math.max(3, world.getGameRuleValue(GameRule.RANDOM_TICK_SPEED));
+                DO_DAYLIGHT_CYCLE = world.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE);
+                DO_WEATHER_CYCLE = world.getGameRuleValue(GameRule.DO_WEATHER_CYCLE);
+                DO_MOB_SPAWNING = world.getGameRuleValue(GameRule.DO_MOB_SPAWNING);
+                DO_FIRE_TICK = world.getGameRuleValue(GameRule.DO_FIRE_TICK);
+                ANNOUNCE_ADVANCEMENTS = world.getGameRuleValue(GameRule.ANNOUNCE_ADVANCEMENTS);
+                RANDOM_TICK_SPEED = world.getGameRuleValue(GameRule.RANDOM_TICK_SPEED);
             }*/
 
 
@@ -177,6 +179,7 @@ public class FunctionsOnTimerPause implements Listener {
             world.setGameRule(GameRule.DO_WEATHER_CYCLE, disable ? false : DO_WEATHER_CYCLE);
             world.setGameRule(GameRule.DO_MOB_SPAWNING, disable ? false : DO_MOB_SPAWNING);
             world.setGameRule(GameRule.DO_FIRE_TICK, disable ? false : DO_FIRE_TICK);
+            world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, disable ? false : ANNOUNCE_ADVANCEMENTS);
             world.setGameRule(GameRule.RANDOM_TICK_SPEED, disable ? 0 : RANDOM_TICK_SPEED);
         }
     }

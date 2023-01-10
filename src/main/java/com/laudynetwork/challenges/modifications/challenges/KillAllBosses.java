@@ -1,6 +1,6 @@
 package com.laudynetwork.challenges.modifications.challenges;
 
-import com.laudynetwork.challenges.modifications.Mod;
+import com.laudynetwork.challenges.modifications.GameMod;
 import com.laudynetwork.challenges.modifications.ModManager;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -11,9 +11,9 @@ import java.util.Objects;
 
 import static org.bukkit.entity.EntityType.*;
 
-public class KillAllBosses extends Mod {
+public class KillAllBosses extends GameMod {
     public KillAllBosses() {
-        super("Kill All Bosses Challenge", "kab", Material.BEACON, ModManager.ModType.CHALLENGE, ModManager.ModStatus.WORK_IN_PROGRESS, "Kill All Bosses Challenge");
+        super("Kill All Bosses Challenge", "kab", Material.BEACON, ModManager.ModType.GOALS, ModManager.ModStatus.OPEN, "Kill All Bosses Challenge");
         super.color = new Color(99, 15, 15);
     }
 

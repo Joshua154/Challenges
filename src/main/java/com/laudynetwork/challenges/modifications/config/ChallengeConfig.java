@@ -1,9 +1,11 @@
 package com.laudynetwork.challenges.modifications.config;
 
+import com.laudynetwork.challenges.api.chatutils.HexColor;
+import com.laudynetwork.challenges.api.gui.IGUI;
+import com.laudynetwork.challenges.modifications.GameMod;
 import com.laudynetwork.challenges.screen.MainScreen;
-import com.laudynetwork.laudynetworkapi.builder.ItemBuilder;
-import com.laudynetwork.laudynetworkapi.chatutils.HexColor;
-import com.laudynetwork.laudynetworkapi.gui.IGUI;
+import com.laudynetwork.networkutils.api.item.itembuilder.ItemBuilder;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -14,9 +16,10 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class ChallengeConfig implements IGUI {
-    ItemStack pane = new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName(ChatColor.RED + "RETURN").build();
+    ItemStack pane = new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).displayName(Component.text(ChatColor.RED + "RETURN")).build();
     private final String name;
     private final ConfigEntry[] configEntries;
+    GameMod recall = null;
 
     public ChallengeConfig(String name, ConfigEntry[] configEntries) {
         this.name = name;
@@ -34,6 +37,8 @@ public class ChallengeConfig implements IGUI {
 
         if (rawSlot(i) >= 0) {
             this.configEntries[rawSlot(i)].onClick(clickType);
+
+            if (recall != null) recall.onUpdate();
 
             player.openInventory(this.getInventory());
         }
@@ -73,5 +78,11 @@ public class ChallengeConfig implements IGUI {
         }
         gui.setContents(items);
         return gui;
+    }
+
+    public void clickedByPlayer(Player player, GameMod recall) {
+        player.openInventory(getInventory());
+        this.recall = recall;
+        recall.onUpdate();
     }
 }
