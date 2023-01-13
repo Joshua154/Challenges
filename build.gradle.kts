@@ -2,7 +2,7 @@
 
 plugins {
     `java-library`
-    id("io.papermc.paperweight.userdev") version "1.3.8"
+    id("io.papermc.paperweight.userdev") version "1.4.1"
     id("com.github.johnrengelman.shadow") version("7.1.2")
 }
 
@@ -24,7 +24,7 @@ dependencies {
     implementation("com.laudynetwork:networkutils:latest")
 
     implementation("de.dytanic.cloudnet:cloudnet-driver:3.4.5-RELEASE")
-    implementation("de.dytanic.cloudnet:cloudnet-bridge:3.4.0-RELEASE")
+    implementation("de.dytanic.cloudnet:cloudnet-bridge:3.4.5-RELEASE")
 }
 repositories {
     mavenLocal()
