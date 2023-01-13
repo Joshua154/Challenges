@@ -24,7 +24,7 @@ dependencies {
     implementation("com.laudynetwork:networkutils:latest")
 
     implementation("de.dytanic.cloudnet:cloudnet-driver:3.4.0-RELEASE")
-    implementation("de.dytanic.cloudnet:cloudnet-bridge:3.4.0-RELEASE")
+    implementation("de.dytanic.cloudnet:cloudnet-bridge:3.4.5-RELEASE")
 }
 repositories {
     mavenLocal()
