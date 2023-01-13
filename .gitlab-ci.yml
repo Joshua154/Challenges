@@ -17,6 +17,7 @@ build:
         USERNAME: $NEXUS_USER
         PASSWORD: $NEXUS_PWD
     script:
+        - chmod 777 gradlew
         - ./gradlew build
 
 deploy:
