@@ -6,8 +6,6 @@ stages:
 build:
     image: gradle:jdk17
     stage: build
-    only:
-        - main
     except:
         - schedules
     artifacts:
