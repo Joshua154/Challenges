@@ -19,17 +19,16 @@ dependencies {
     implementation("org.projectlombok:lombok:1.18.26")
     annotationProcessor("org.projectlombok:lombok:1.18.26")
 
-    paperDevBundle("1.19.2-R0.1-SNAPSHOT")
+    paperDevBundle("1.19.3-R0.1-SNAPSHOT")
 
     implementation("com.laudynetwork:networkutils:latest")
 
-    implementation("de.dytanic.cloudnet:cloudnet-driver:3.4.5-RELEASE")
-    implementation("de.dytanic.cloudnet:cloudnet-bridge:3.4.5-RELEASE")
+    api("eu.thesimplecloud.simplecloud:simplecloud-api:2.4.1")
 }
 repositories {
     mavenLocal()
     mavenCentral()
-    maven("https://repo.cloudnetservice.eu/repository/releases/")
+    maven("https://repo.thesimplecloud.eu/artifactory/list/gradle-release-local/")
     maven("https://repo.dmulloy2.net/repository/public/")
     maven {
         url = uri("https://repo.laudynetwork.com/repository/maven")
