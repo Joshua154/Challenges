@@ -24,7 +24,7 @@ dependencies {
 
     implementation("com.laudynetwork:networkutils:latest")
 
-    api("eu.thesimplecloud.simplecloud:simplecloud-api:2.4.1")
+    api("eu.thesimplecloud.simplecloud:simplecloud-api:2.5.0")
 }
 repositories {
     mavenLocal()
