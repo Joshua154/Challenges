@@ -17,8 +17,8 @@ java {
 
 dependencies {
     // test build
-    implementation("org.projectlombok:lombok:1.18.26")
-    annotationProcessor("org.projectlombok:lombok:1.18.26")
+    implementation("org.projectlombok:lombok:1.18.28")
+    annotationProcessor("org.projectlombok:lombok:1.18.28")
 
     paperDevBundle("1.19.3-R0.1-SNAPSHOT")
 
